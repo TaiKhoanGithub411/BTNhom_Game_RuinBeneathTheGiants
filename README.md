@@ -1,361 +1,169 @@
-# Dự án Game: Ruins Beneath the Giants
+# Thiết kế game 2D endless runner ngang
 
-## Tổng quan dự án
 
-### Công nghệ ngôn ngữ sử dụng
+## 1. Định hướng tổng thể
 
-- Engine: Unity
-- Ngôn ngữ: C#
-- Quản lý mã nguồn: Git
-
-### Bối cảnh và cốt truyện
+Với game endless runner góc nhìn ngang, nên chia dự án thành 5 lớp logic:
 
-Trò chơi lấy bối cảnh trong một thế giới hậu tận thế nơi nhân loại đã sụp đổ và phải sinh tồn dưới chân những thực thể khổng lồ đầy bí ẩn được gọi là Giants. Người chơi hóa thân thành một kẻ sống sót phải băng qua các khu phố đổ nát, khu công nghiệp hoang tàn và những cánh rừng rậm nguy hiểm để tìm kiếm tài nguyên và con đường đến vùng an toàn.
-
----
-
-## Thiết kế hệ thống chức năng
-
-### 1. Hệ thống cốt lõi (Core Systems)
-
-Hệ thống điều phối vòng lặp trò chơi, UI, lưu trạng thái và quá trình sản sinh môi trường.
-
-#### Sơ đồ hệ thống: Service Locator & Interface (Decoupled Services)
-
-```mermaid
-classDiagram
-    %% Chuẩn hóa tất cả các hệ thống lớn trong game
-    class IGameService {
-        <<interface>>
-        +Initialize() void
-        +Shutdown() void
-    }
-
-    %% Lưu trữ và cung cấp các dịch vụ toàn cục trong game
-    class ServiceLocator {
-        -Dictionary~Type, IGameService~ _services
-        +RegisterService(Type, IGameService) void
-        +GetService~T~() T
-    }
-
-    %% Quản lý luồng và trạng thái của game
-    class GameManager {
-        -ServiceLocator _locator
-        +ChangeState(GameState) void
-    }
-
-    %% Xử lý các tính năng đặc thù của thể loại Roguelite
-    class RogueliteService {
-        +ApplyMetaProgression() void
-    }
-
-    %% Điều khiển hiển thị của các màn hình chức năng
-    class UIService {
-        +OpenScreen(ScreenID) void
-    }
-
-    %% Trung tâm giao tiếp sự kiện toàn cục giữa các hệ thống
-    class EventBus {
-        +Publish(GameEvent) void
-        +Subscribe(GameEvent, Action) void
-        +Unsubscribe(GameEvent, Action) void
-    }
-
-    %% Quản lý lưu và tải trạng thái meta-progression
-    class SaveService {
-        +SaveProgress() void
-        +LoadProgress() void
-    }
-
-    %% Relationships
-    IGameService <|.. RogueliteService : Implementation
-    IGameService <|.. UIService : Implementation
-    IGameService <|.. EventBus : Implementation
-    IGameService <|.. SaveService : Implementation
-
-    ServiceLocator "1" o-- "n" IGameService : Container
-    GameManager ..> ServiceLocator : Dependency
-```
-
-#### Đặc điểm hệ thống
-
-- Tuân theo nguyên tắc Dependency Inversion (SOLID)
-- Các hệ thống giao tiếp với nhau thông qua interface
-- `EventBus` là dịch vụ toàn cục, đăng ký vào `ServiceLocator` — tránh tạo instance cục bộ
-- `SaveService` quản lý meta-progression cho thể loại Roguelite
-- Dễ mở rộng, dễ tái sử dụng
-
----
-
-### 2. Hệ thống người chơi (Player Systems)
-
-Quản lý các tài nguyên, trạng thái của người chơi: di chuyển, trạng thái bất lợi, chiến đấu và kho đồ.
-
-#### Sơ đồ hệ thống: Phân tách bằng Event Bus & Strategy (Event-driven Architecture)
-
-```mermaid
-classDiagram
-    %% Trung tâm giao tiếp sự kiện toàn cục (đăng ký qua ServiceLocator)
-    class EventBus {
-        +Publish(GameEvent) void
-        +Subscribe(GameEvent, Action) void
-        +Unsubscribe(GameEvent, Action) void
-    }
-
-    %% Cổng giao tiếp điều khiển (không quan tâm nguồn input)
-    class IInputProvider {
-        <<interface>>
-        +GetMoveInput() Vector2
-        +IsAttackPressed() bool
-    }
-
-    %% Chiến lược tấn công có thể hoán đổi
-    class ICombatBehavior {
-        <<interface>>
-        +Attack() void
-    }
-
-    %% Quản lý vòng đời và điều phối giữa các thành phần
-    class PlayerEntity {
-        +Initialize() void
-        +OnDestroy() void
-    }
-
-    %% Lưu trữ và xử lý dữ liệu sinh tồn
-    class PlayerStats {
-        +float HP
-        +float MaxHP
-        +TakeDamage(float) void
-    }
-
-    %% Xử lý logic tấn công
-    class PlayerCombat {
-        -ICombatBehavior _attackStrategy
-        +SetStrategy(ICombatBehavior) void
-        +ExecuteAttack() void
-    }
-
-    %% Quản lý giao diện - lắng nghe từ EventBus để cập nhật UI
-    class UIManager {
-        +HandleHealthChangeEvent() void
-        +HandleCombatEvent() void
-    }
-
-    %% Relationships
-    PlayerEntity *-- PlayerStats : Thành phần thiết yếu
-    PlayerEntity *-- PlayerCombat : Thành phần thiết yếu
-    PlayerEntity o--> IInputProvider : Nhận lệnh từ nguồn ngoài
-    PlayerCombat o--> ICombatBehavior : Chiến lược tấn công
-
-    PlayerStats ..> EventBus : Publish PlayerDamagedEvent
-    PlayerCombat ..> EventBus : Publish PlayerAttackEvent
-    UIManager ..> EventBus : Subscribe để cập nhật giao diện
-```
-
-#### Lưu ý quan trọng
-
-- `EventBus` được lấy qua `ServiceLocator.GetService<EventBus>()`, **không** khởi tạo cục bộ trong `PlayerEntity`
-- Bắt buộc gọi `Unsubscribe` trong `OnDestroy()` để tránh memory leak khi entity bị hủy
-
----
-
-### 3. Hệ thống Bẫy và Trùm (Trap & Boss Systems)
-
-#### 3.1 Hệ thống kẻ thù thông thường
-
-Mô hình cây kế thừa cho các loại kẻ thù.
-
-```mermaid
-classDiagram
-    class EnemyBase {
-        <<abstract>>
-        +float HP
-        +Move() void
-        +TakeDamage(float) void
-        +Die()* void
-    }
-
-    class MeleeEnemy {
-        +Die() void
-    }
-
-    class RangedEnemy {
-        +float AttackRange
-        +Attack() void
-        +Die() void
-    }
-
-    class GiantBoss {
-        -BossStateMachine _stateMachine
-        +TakeDamage(float) void
-        +Die() void
-    }
-
-    EnemyBase <|-- MeleeEnemy : Kế thừa toàn bộ hành vi
-    EnemyBase <|-- RangedEnemy : Kế thừa toàn bộ hành vi
-    EnemyBase <|-- GiantBoss : Kế thừa, mở rộng bằng StateMachine
-```
-
----
-
-#### 3.2 Hệ thống bẫy (Trap System)
-
-Bẫy không kế thừa từ `EnemyBase` — không có HP, không di chuyển, không có AI. Thiết kế tách biệt theo nguyên tắc Interface Segregation (SOLID).
-
-```mermaid
-classDiagram
-    class ITrap {
-        <<interface>>
-        +Activate() void
-        +Reset() void
-    }
-
-    %% Lớp trừu tượng dùng chung cho mọi loại bẫy
-    class TrapBase {
-        <<abstract>>
-        #bool _isActive
-        #CheckCondition() bool
-        +Activate()* void
-        +Reset() void
-    }
-
-    %% Kích hoạt khi người chơi đi vào vùng trigger
-    class ProximityTrap {
-        +OnTriggerEnter(Collider) void
-        +Activate() void
-    }
-
-    %% Kích hoạt khi đạt điều kiện tùy chỉnh (thời gian, sự kiện, ...)
-    class ConditionalTrap {
-        +TrapCondition Condition
-        +Activate() void
-    }
-
-    ITrap <|.. TrapBase
-    TrapBase <|-- ProximityTrap : Kích hoạt theo vị trí
-    TrapBase <|-- ConditionalTrap : Kích hoạt theo điều kiện
-
-    ProximityTrap ..> EventBus : Publish TrapTriggeredEvent
-    ConditionalTrap ..> EventBus : Publish TrapTriggeredEvent
-```
-
----
-
-#### 3.3 Boss State Machine (GiantBoss)
-
-Điều phối AI của Boss qua các trạng thái rõ ràng.
-
-```mermaid
-classDiagram
-    class IBossState {
-        <<interface>>
-        +Enter() void
-        +Execute() void
-        +Exit() void
-    }
-
-    %% Quản lý chuyển đổi trạng thái và timer sinh tồn
-    class BossStateMachine {
-        -IBossState _currentState
-        -float _survivalTimer
-        +ChangeState(IBossState) void
-        +Update() void
-    }
-
-    %% Boss xuất hiện, chạy animation vào màn
-    class SpawnState {
-        +Enter() void
-        +Execute() void
-        +Exit() void
-    }
-
-    %% Báo hiệu hướng tấn công cho người chơi trước khi đánh
-    class TelegraphState {
-        -float _warningDuration
-        +Enter() void
-        +Execute() void
-        +Exit() void
-    }
-
-    %% Thực hiện tấn công
-    class AttackState {
-        +Enter() void
-        +Execute() void
-        +Exit() void
-    }
-
-    %% Boss chết hoặc người chơi sống sót hết thời gian định sẵn
-    class StageClearState {
-        +ClearReason Reason
-        +Enter() void
-        +Execute() void
-    }
-
-    BossStateMachine o-- IBossState : Quản lý trạng thái hiện tại
-    IBossState <|.. SpawnState
-    IBossState <|.. TelegraphState
-    IBossState <|.. AttackState
-    IBossState <|.. StageClearState
-
-    TelegraphState ..> EventBus : Publish BossWarningEvent
-    StageClearState ..> EventBus : Publish StageClearedEvent
-```
-
-#### Luồng chuyển trạng thái
-
-```
-Spawn ──► Telegraph ──► Attack ──┬──► Telegraph  (lặp lại cho đến khi kết thúc)
-                                  │
-                                  └──► StageClear
-                                           ├── Reason.BossDied   (boss bị tiêu diệt)
-                                           └── Reason.TimerEnded (người chơi sống sót đủ thời gian)
-```
-
-#### Lưu ý quan trọng
-
-- `SurvivalTimer` đặt trong `BossStateMachine`, chạy xuyên suốt các lần lặp Telegraph → Attack, **không** đặt bên trong `AttackState`
-- `TelegraphState` publish `BossWarningEvent` lên `EventBus` để UI hiển thị chỉ báo hướng tấn công
-- `StageClearState` phân biệt 2 lý do clear qua enum `ClearReason` — phục vụ logic drop loot và điểm số khác nhau
-
----
-
-### 4. Hệ thống Vật phẩm và Kho đồ (Item & Inventory Systems)
-
-Quản lý dữ liệu thông tin vật phẩm và tương tác nhặt đồ.
-
-#### Sơ đồ hệ thống: ScriptableObject Kế thừa (Inheritance Data Assets)
-
-```mermaid
-classDiagram
-    class ItemData {
-        <<ScriptableObject>>
-        +string ItemName
-        +Sprite Icon
-        +ItemType Type
-    }
-
-    class ConsumableData {
-        +float RestoresHP
-    }
-
-    class WeaponData {
-        +float Damage
-        +float MaxDurability
-    }
-
-    %% Entity vật lý trong scene, tham chiếu đến dữ liệu ItemData
-    class InteractableItem {
-        -ItemData _itemRef
-        +Pickup() void
-    }
-
-    ItemData <|-- ConsumableData : Mở rộng dữ liệu
-    ItemData <|-- WeaponData : Mở rộng dữ liệu
-    InteractableItem --> ItemData : Tham chiếu dữ liệu
-```
-
-#### Đặc điểm hệ thống
-
-- Dữ liệu vật phẩm lưu dưới dạng `ScriptableObject` — chỉnh sửa trực tiếp trong Unity Editor mà không cần sửa code
-- `InteractableItem` là MonoBehaviour đặt trong scene, tách biệt hoàn toàn khỏi dữ liệu
-- Dễ mở rộng thêm loại vật phẩm mới bằng cách tạo subclass của `ItemData`
+- Input
+- Player State
+- World Interaction
+- Encounter
+- Persistence
+
+Cách tiếp cận này giúp tách điều khiển nhân vật khỏi logic trap, boss và item.
+Điểm quan trọng là game có yếu tố tiến-lùi thay vì chỉ chạy một chiều. Vì vậy đây nên được xem là một side-scrolling runner có nhịp tiến trình, không phải runner truyền thống một hướng. Điều này ảnh hưởng trực tiếp đến camera, spawn, lưu vị trí và điều kiện xuất hiện boss.
+
+## 2. Kiến trúc đề xuất
+
+| Module | Nhiệm vụ | Đối tượng chính | Ghi chú thiết kế |
+|---|---|---|---|
+| Player | Di chuyển, nhảy, chịu sát thương, stamina, trạng thái dịch bệnh | PlayerController, Health, Stamina, StatusEffect | Nên tách motor vật lý với dữ liệu sinh lực |
+| Item | Hồi thể lực, hồi máu, xóa hiệu ứng bệnh | ItemPickup, ItemEffect, ItemDatabase | Dùng data-driven để dễ thêm item mới |
+| Trap | Bẫy tĩnh gây sát thương | TrapBase, HazardVolume | Trap không tự di chuyển, chỉ kích hoạt khi va chạm/trigger |
+| Boss | Xuất hiện theo điều kiện, đánh tự động, biến mất sau thời gian | BossEncounter, BossAI, BossAttackPattern | Tách điều kiện spawn khỏi hành vi chiến đấu |
+| Save | Tự lưu theo chu kỳ và lưu trạng thái hiện tại | SaveService, SaveData, SaveSlot | Không lưu trực tiếp object runtime; chỉ lưu snapshot |
+
+## 3. Thiết kế luồng gameplay
+
+### Luồng cơ bản
+
+1. Người chơi điều khiển di chuyển tiến/lui bằng A/D và nhảy bằng W hoặc Space.
+2. Khi chạy và/hoặc giữ trạng thái hoạt động mạnh, stamina giảm theo thời gian.
+3. Khi stamina cạn, áp dụng hậu quả lên máu hoặc trạng thái suy kiệt theo thời gian
+4. Bẫy tĩnh gây sát thương ngay khi chạm vùng kích hoạt.
+5. Item được nhặt để phục hồi hoặc xóa trạng thái xấu.
+6. Boss chỉ xuất hiện khi thỏa điều kiện đặc biệt và tấn công tự động theo pattern ngẫu nhiên có kiểm soát.
+7. Game lưu định kỳ và khi có mốc an toàn như nhặt item quan trọng hoặc vượt checkpoint.
+
+### Luồng state player
+
+Nên dùng một state machine nhẹ với các trạng thái:
+
+- Idle
+- Move
+- Jump
+- Exhausted
+- Infected
+- Dead
+
+Các trạng thái này giúp kiểm soát animation, tốc độ di chuyển và giới hạn hành vi.
+
+### Luồng boss encounter
+
+Không nên để boss tự kiểm tra mọi thứ trong scene. Hãy tạo một `BossEncounterTrigger` riêng, chịu trách nhiệm:
+
+- Phát hiện điều kiện kích hoạt
+- Khóa hoặc điều chỉnh camera nếu cần
+- Spawn boss
+- Bắt đầu đồng hồ đếm thời gian hiện diện
+
+Khi hết thời gian, encounter tự kết thúc, boss biến mất và hệ thống trở về trạng thái thường.
+
+## 4. Thiết kế từng hệ thống
+
+### Player
+
+Dùng 2 thành phần chính:
+
+- `PlayerMotor` cho physics
+- `PlayerVitals` cho máu, thể lực và trạng thái bệnh
+
+Máu giảm khi nhận sát thương hoặc bị hiệu ứng dịch bệnh. Stamina giảm theo thời gian khi chạy, và hồi phục khi nghỉ hoặc dùng item. Hồi phục đứng yên chỉ là cơ chế phụ, tốc độ rất chậm.
+
+Khuyến nghị: để stamina là nguồn nhịp độ, còn health là nguồn sinh tồn.
+
+### Item
+
+Mỗi item nên có data gồm loại effect, giá trị hồi, thời lượng và điều kiện kích hoạt. 3 item cần sớm là:
+
+- Hồi stamina
+- Hồi máu
+- Xóa bệnh
+
+Các item này nên spawn ngẫu nhiên dọc đường chạy để tạo động lực khám phá.
+
+Nếu game có nhiều item sau này, hãy dùng ScriptableObject để cấu hình. Runtime chỉ cần đọc dữ liệu và áp effect.
+
+### Trap
+
+Trap là object tĩnh, có collider hoặc trigger, không dùng AI di chuyển. Nó chỉ phát sát thương khi player đi vào vùng kích hoạt hoặc chạm vật lý.
+
+Chướng ngại vật cũng nên được xem là một nhánh của trap level design vì người chơi phải nhảy qua.
+
+Nên chuẩn hóa base class của trap để sau này thêm spike, poison cloud, flame floor mà không phải viết lại luồng damage.
+
+### Boss
+
+Boss không nên gắn logic vào chính prefab chiến đấu. Nên tách thành:
+
+- Điều kiện xuất hiện
+- Controller
+- Pattern tấn công
+- Vòng đời `spawn -> active -> despawn`
+
+Các đòn đánh không cố định nên là random có trọng số, để boss vẫn ngẫu nhiên nhưng không thành hỗn loạn.
+
+## 5. Phương án thiết kế stamina và máu
+
+| Cơ chế | Phương án A | 
+|---|---|
+| Stamina giảm | Giảm theo thời gian khi chạy |
+| Stamina cạn | Trừ máu trực tiếp | 
+| Bệnh dịch | Debuff gây DOT lên máu 
+| Hồi phục | Hồi theo thời gian, bằng item/checkpoint | 
+
+## 6. Lưu trữ và auto-save
+
+Save system nên lưu snapshot theo các nhóm dữ liệu:
+
+- Vị trí player
+- HP
+- Stamina
+- Hiệu ứng đang dính
+- Inventory/item đã nhặt
+- Trạng thái boss encounter
+- Các trap/item đã bị tiêu thụ hoặc vô hiệu hóa
+
+Auto-save nên kích hoạt khi nhặt item hiếm và khi vượt màn. Nếu cần thêm một lớp an toàn, có thể lưu định kỳ theo chu kỳ thời gian trong cài đặt, nhưng hai mốc ưu tiên vẫn là item hiếm và clear stage.
+
+Tránh lưu trực tiếp reference của object Unity. Thay vào đó, map dữ liệu sang DTO thuần C# để serialize dễ và ổn định hơn.
+
+## 7. Dữ liệu cần lưu
+
+| Nhóm dữ liệu | Trường cần lưu | Lý do |
+|---|---|---|
+| Player | position, health, stamina, activeEffects, facing, velocity optional | Khôi phục đúng trạng thái chơi |
+| Progress | currentStage, checkpointId, runTime, clearedStageCount | Đồng bộ tiến trình endless run |
+| Inventory/Items | pickedItemIds, consumedItemIds, rareItemPickups | Tránh spawn lại vật phẩm đã lấy và phục vụ auto-save |
+| World | disabledTraps, openedPaths, spawnedBossState, generatedStageSeed | Khôi phục môi trường đã thay đổi |
+
+## 8. Phương án triển khai thực tế
+
+| Giai đoạn | Mục tiêu | Ưu tiên |
+|---|---|---|
+| Phase 1 | Player movement + health/stamina + save cơ bản | Rất cao |
+| Phase 2 | Trap + item pickup + status effect | Rất cao |
+| Phase 3 | Boss encounter + attack pattern | Cao |
+| Phase 4 | Tối ưu UI, checkpoint, balancing, content mở rộng | Trung bình |
+
+## Gợi ý kỹ thuật thêm
+
+Nếu làm trên Unity, nên ưu tiên:
+
+- ScriptableObject cho dữ liệu
+- Event-driven cho giao tiếp giữa hệ thống
+- State machine cho player và boss
+- JSON hoặc binary thuần C# cho save, nhưng giữ schema ổn định để tránh lỗi phiên bản
+
+Về tổ chức thư mục, có thể chia thành:
+
+- `Scripts/Core`
+- `Scripts/Player`
+- `Scripts/Items`
+- `Scripts/Traps`
+- `Scripts/Boss`
+- `Scripts/Save`
+- `Scripts/UI`
+- `ScriptableObjects/Data`
+
