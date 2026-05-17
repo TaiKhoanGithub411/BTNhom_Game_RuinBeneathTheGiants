@@ -1,0 +1,63 @@
+---
+description: Quy tắc thiết kế Item pickup và Trap hazard — áp dụng khi làm việc với ItemPickup, ItemEffect, TrapBase, HazardVolume
+globs: ["Scripts/Items/**/*.cs", "Scripts/Traps/**/*.cs", "ScriptableObjects/Data/**/*.asset"]
+alwaysApply: false
+---
+
+# Hệ thống Item & Trap
+
+## Item — Data-driven với ScriptableObject
+
+### ItemData (ScriptableObject)
+```csharp
+[CreateAssetMenu(fileName = "Item", menuName = "Game/Item")]
+public class ItemData : ScriptableObject {
+    public ItemType type;       // StaminaRestore, HealthRestore, CureDisease
+    public float value;         // Lượng hồi phục
+    public float duration;      // Thời lượng hiệu ứng (0 = instant)
+    public Sprite icon;
+}
+```
+
+### 3 item ưu tiên Phase 2
+| Item | Type | Hành vi |
+|---|---|---|
+| Stamina Potion | `StaminaRestore` | Hồi stamina tức thì |
+| Health Pack | `HealthRestore` | Hồi HP tức thì |
+| Antidote | `CureDisease` | Xóa toàn bộ status `Infected` |
+
+### ItemPickup — Runtime
+- Chỉ đọc `ItemData`, KHÔNG chứa logic effect
+- Khi player trigger: gọi `PlayerVitals.ApplyItemEffect(itemData)` rồi tự destroy
+- Ghi nhận ID vào SaveData để không spawn lại sau load
+
+## Trap — Tĩnh, trigger-based
+
+### Quy tắc thiết kế
+- Trap KHÔNG có AI, KHÔNG tự di chuyển
+- Chỉ gây sát thương khi player vào `HazardVolume` (collider trigger)
+- Base class chuẩn hóa để dễ mở rộng
+
+### TrapBase template
+```csharp
+public abstract class TrapBase : MonoBehaviour {
+    [SerializeField] protected float damage;
+    [SerializeField] protected DamageType damageType; // Instant, DOT, Knockback
+
+    protected virtual void OnTriggerEnter2D(Collider2D other) {
+        if (other.TryGetComponent<PlayerVitals>(out var vitals))
+            ApplyEffect(vitals);
+    }
+
+    protected abstract void ApplyEffect(PlayerVitals vitals);
+}
+```
+
+### Loại trap mở rộng sau (kế thừa TrapBase)
+- `SpikeTrap` — instant damage
+- `PoisonCloud` — DOT theo duration
+- `FlameFloor` — DOT + knockback
+
+## Spawn rules
+- Item spawn ngẫu nhiên dọc route, seed theo `generatedStageSeed` trong SaveData
+- Trap là static prefab trong scene/level chunk, không spawn runtime (Phase 1-2)

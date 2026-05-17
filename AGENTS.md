@@ -1,41 +1,50 @@
-# Agent Instructions — Ruins Beneath the Giants
+# Project: 2D Endless Side-Scrolling Runner
 
-## Bootstrap
+## Tổng quan
+Game runner 2D góc nhìn ngang, **có yếu tố tiến-lùi** (không phải one-direction runner truyền thống). Engine: Unity, ngôn ngữ: C#. Đây là dự án học tập của sinh viên IT năm nhất — ưu tiên code rõ ràng, dễ đọc, có comment giải thích.
 
-This is a Unity project. Do not run `npm install` or `pip install`.
-Open the project with Unity Hub using Unity 6 LTS.
+## Kiến trúc — 5 lớp logic
+```
+Input → Player State → World Interaction → Encounter → Persistence
+```
 
-## Before Writing Any Code
+## Cấu trúc thư mục
+```
+Assets/
+├── Scripts/
+│   ├── Core/          ← GameManager, EventBus, interfaces chung
+│   ├── Player/        ← PlayerController, PlayerMotor, PlayerVitals, StatusEffect
+│   ├── Items/         ← ItemPickup, ItemEffect, ItemDatabase
+│   ├── Traps/         ← TrapBase, SpikeTrap, PoisonCloud...
+│   ├── Boss/          ← BossEncounterTrigger, BossController, BossAttackPattern
+│   ├── Save/          ← SaveService, SaveData (DTO), ISaveable
+│   └── UI/            ← HUD, HealthBar, StaminaBar
+└── ScriptableObjects/
+    └── Data/          ← ItemData, BossAttack, StatusEffectData
+```
 
-1. Read `.github/copilot-instructions.md` for architecture overview and patterns
-2. Read `.github/instructions/csharp.instructions.md` for C# conventions
-3. Identify which system the task belongs to (Core / Player / Enemy / Trap / Item / UI)
-   and place new files in the corresponding folder under `Assets/Scripts/`
+## Quy ước lập trình
+- Mỗi class một file, tên file = tên class
+- Dùng `[SerializeField] private` thay vì `public` cho Unity Inspector
+- Dùng C# event (`Action`, `Func`) để giao tiếp giữa hệ thống
+- ScriptableObject cho mọi dữ liệu cấu hình (item, boss attack, status effect)
+- Không dùng singleton tràn lan — chỉ GameManager và SaveService được phép singleton
+- Comment bằng tiếng Việt hoặc tiếng Anh nhất quán trong từng file
 
-## Creating New Systems or Classes
+## Những việc KHÔNG làm
+- ❌ Serialize MonoBehaviour hoặc GameObject vào save file
+- ❌ Gọi `FindObjectOfType` trong Update() — cache trong Awake/Start
+- ❌ Để Boss tự kiểm tra điều kiện spawn của mình
+- ❌ Gộp logic physics và logic sinh lực vào cùng 1 class
+- ❌ Hardcode logic cho từng loại item/trap/effect — dùng data-driven
 
-- New services must implement `IGameService` and be registered in `ServiceLocator`
-- New enemy types must extend `EnemyBase`
-- New traps must extend `TrapBase` (not `EnemyBase`)
-- New boss states must implement `IBossState`
-- New item types must extend `ItemData` as a ScriptableObject
-- New combat behaviors must implement `ICombatBehavior`
+## Giai đoạn phát triển hiện tại
+| Phase | Trạng thái | Nội dung |
+|---|---|---|
+| Phase 1 | 🔧 Hiện tại | Player movement + health/stamina + save cơ bản |
+| Phase 2 | Chờ | Trap + item pickup + status effect |
+| Phase 3 | Chờ | Boss encounter + attack pattern |
+| Phase 4 | Chờ | UI, balancing, content mở rộng |
 
-## Modifying Existing Classes
-
-- Do not add new fields to `PlayerEntity` without a clear reason — prefer adding components
-- Do not move `SurvivalTimer` out of `BossStateMachine` into any state class
-- Do not change `EventBus` to a static singleton — it must stay as a registered `IGameService`
-
-## Event Naming Convention
-
-When creating new GameEvent types, follow existing pattern:
-- `[Subject][Action]Event` — e.g. `PlayerDamagedEvent`, `TrapTriggeredEvent`, `BossWarningEvent`
-- Place event classes in `Assets/Scripts/Core/Events/`
-
-## What to Avoid
-
-- Do not use `FindObjectOfType` anywhere
-- Do not store item stats directly in MonoBehaviours — use ScriptableObject references
-- Do not use `PlayerPrefs` for progression — use `SaveService`
-- Do not create new singletons — register via `ServiceLocator` instead
+## Liên kết tài liệu
+- Thiết kế đầy đủ: `README.md` ở root project

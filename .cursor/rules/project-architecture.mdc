@@ -1,0 +1,31 @@
+---
+description: Kiến trúc tổng thể dự án 2D endless side-scrolling runner trong Unity
+alwaysApply: true
+---
+
+# Project: 2D Endless Side-Scrolling Runner
+
+## Tech Stack
+- **Engine**: Unity (C#)
+- **Pattern**: Event-driven, ScriptableObject data-driven, lightweight State Machine
+- **Serialization**: JSON hoặc binary C# thuần (không dùng Unity object reference trực tiếp)
+
+## 5 Lớp logic cốt lõi
+- **Input** → đọc A/D (di chuyển), W/Space (nhảy)
+- **Player State** → Idle / Move / Jump / Exhausted / Infected / Dead
+- **World Interaction** → Trap, Item pickup
+- **Encounter** → Boss spawn / active / despawn
+- **Persistence** → AutoSave, SaveSlot, DTO snapshot
+
+## Cấu trúc thư mục bắt buộc
+```
+Scripts/Core      Scripts/Player    Scripts/Items
+Scripts/Traps     Scripts/Boss      Scripts/Save
+Scripts/UI        ScriptableObjects/Data
+```
+
+## Nguyên tắc bất biến
+- KHÔNG lưu Unity object reference vào save file; chỉ lưu DTO thuần C#
+- KHÔNG để Boss tự kiểm tra điều kiện spawn; dùng BossEncounterTrigger riêng
+- KHÔNG gộp PlayerMotor (physics) và PlayerVitals (HP/stamina) vào 1 class
+- Mọi giao tiếp giữa hệ thống dùng C# event hoặc UnityEvent, không GetComponent chuỗi
