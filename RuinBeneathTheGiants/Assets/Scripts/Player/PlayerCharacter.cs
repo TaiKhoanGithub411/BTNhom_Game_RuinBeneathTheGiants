@@ -9,6 +9,10 @@ public class PlayerCharacter : PlayerCharacterBase
     [Header("Runtime Movement")]
     [SerializeField] private float inputDeadZone = 0.01f;
 
+    [Header("Animation")]
+    [SerializeField] private Animator playerAnimator;
+    [SerializeField] private string isMovingParameter = "IsMoving";
+
     private float moveInput;
 
     /// <summary>
@@ -27,10 +31,12 @@ public class PlayerCharacter : PlayerCharacterBase
         if (moveInput != 0f)
         {
             UpdateFacingDirection(moveInput);
+            UpdateMoveState(true);
         }
-
-        if (moveInput == 0f)
+        else
         {
+            UpdateMoveState(false);
+
             if (IsGrounded && CurrentState != PlayerState.Jump)
             {
                 SetState(PlayerState.Idle);
@@ -65,11 +71,22 @@ public class PlayerCharacter : PlayerCharacterBase
     }
 
     /// <summary>
+    /// Cập nhật trạng thái animation giữa đứng yên và chạy dựa trên input di chuyển.
+    /// </summary>
+    private void UpdateMoveState(bool isMoving)
+    {
+        if (playerAnimator != null)
+        {
+            playerAnimator.SetBool(isMovingParameter, isMoving);
+        }
+    }
+
+    /// <summary>
     /// Thực hiện nhảy nếu đang đứng trên mặt đất và không bị khóa.
     /// </summary>
     public override void Jump()
     {
-        if (IsLocked || CurrentState == PlayerState.Dead || !IsGrounded)
+        if (IsLocked || CurrentState == PlayerState.Dead || !IsGrounded || CurrentState == PlayerState.Jump)
         {
             return;
         }

@@ -355,6 +355,7 @@ GameObject:
   - component: {fileID: 1646473841}
   - component: {fileID: 1646473840}
   - component: {fileID: 1646473839}
+  - component: {fileID: 1646473846}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -449,7 +450,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMotor
   playerCharacter: {fileID: 1646473843}
   playerRigidbody: {fileID: 1646473840}
-  movementSmoothTime: 0.08
+  movementSmoothTime: 0.01
 --- !u!114 &1646473842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -476,21 +477,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCharacter
   moveSpeed: 5
-  jumpForce: 12
+  jumpForce: 10
   acceleration: 20
   deceleration: 25
-  playerRigidbody: {fileID: 0}
-  playerCollider: {fileID: 0}
-  groundCheck: {fileID: 0}
+  playerRigidbody: {fileID: 1646473840}
+  playerCollider: {fileID: 1646473839}
+  groundCheck: {fileID: 1840867588}
   groundLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   groundCheckRadius: 0.15
   maxHealth: 100
   currentHealth: 100
   maxStamina: 100
   currentStamina: 100
   inputDeadZone: 0.01
+  playerAnimator: {fileID: 1646473846}
+  speedParameter: IsMoving
 --- !u!212 &1646473844
 SpriteRenderer:
   serializedVersion: 2
@@ -565,6 +568,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1646473846
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1646473838}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ced19e198369ac62a8d8a1c9aa996bd2, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1840867585
 GameObject:
   m_ObjectHideFlags: 0
@@ -576,7 +601,7 @@ GameObject:
   - component: {fileID: 1840867588}
   - component: {fileID: 1840867587}
   - component: {fileID: 1840867586}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
