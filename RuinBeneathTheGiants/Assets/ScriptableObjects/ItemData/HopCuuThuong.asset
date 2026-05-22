@@ -10,10 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f3b16ee27cf7f4a0b9e02c3366028bb, type: 3}
-  m_Name: HoiTheLucNho
+  m_Name: HopCuuThuong
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemName: HoiTheLucNho
-  icon: {fileID: -8781457552448529170, guid: 5f1b017da0c5b580089d51a44e0965e0, type: 3}
-  effectType: 1
-  value: 10
+  itemName: HopCuuThuong
+  icon: {fileID: -2500860971080723371, guid: 2c71b9c575ba2fe8098bdca6d94d6a0d, type: 3}
+  effects:
+  - EffectType: 0
+    Value: 50
+    Duration: 0
   lifetime: 10

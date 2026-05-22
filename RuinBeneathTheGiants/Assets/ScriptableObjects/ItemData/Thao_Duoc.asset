@@ -10,10 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f3b16ee27cf7f4a0b9e02c3366028bb, type: 3}
-  m_Name: HoiMauLon
+  m_Name: Thao_Duoc
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemName: HoiMauLon
-  icon: {fileID: 6850360916889565361, guid: 676f81fa29fc068aab566de4af9fb687, type: 3}
-  effectType: 0
-  value: 5
+  itemName: ThaoDuoc
+  icon: {fileID: 4970972128393845209, guid: 1e81539bc3cf60c3681dca73a3cd2442, type: 3}
+  effects:
+  - EffectType: 3
+    Value: 0
+    Duration: 20
   lifetime: 10

@@ -10,10 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f3b16ee27cf7f4a0b9e02c3366028bb, type: 3}
-  m_Name: HoiTheLucVua
+  m_Name: MushRoom
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
-  itemName: HoiTheLucVua
-  icon: {fileID: -8956795710997249776, guid: b6ea055c453f5e82b87bae3b40e3b7fe, type: 3}
-  effectType: 1
-  value: 15
+  itemName: Mushroom
+  icon: {fileID: 357749872346554099, guid: 49bddb43eb5bb1851b30abbdf7e0e836, type: 3}
+  effects:
+  - EffectType: 2
+    Value: 20
+    Duration: 10
   lifetime: 10

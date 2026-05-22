@@ -13,6 +13,8 @@ using UnityEngine;
 /// </summary>
 public class PlayerVitals : MonoBehaviour
 {
+    private StatusEffectManager statusEffectManager;
+
     // =========================================================
     // Events
     // ---------------------------------------------------------
@@ -38,8 +40,17 @@ public class PlayerVitals : MonoBehaviour
     private bool isExhausted = false;
     public bool IsExhausted => isExhausted;
     
+    // Trạng thái bị kẹp bởi bẫy
+    private bool isTrapped = false;
+    public bool IsTrapped => isTrapped;
+    
     public float MaxHealth => maxHealth;
     public float MaxStamina => maxStamina;
+
+    private void Awake()
+    {
+        statusEffectManager = GetComponent<StatusEffectManager>();
+    }
 
     public void DrainStaminaContinuous()
     {
@@ -89,6 +100,49 @@ public class PlayerVitals : MonoBehaviour
         {
             OnDeath?.Invoke();
         }
+    }
+
+    /// <summary>
+    /// Nhận sát thương từ từ trong một khoảng thời gian, đồng thời bị kẹp tại chỗ.
+    /// Dùng cho Trap.
+    /// </summary>
+    public void TakeDamageOverTime(float totalDamage, float duration)
+    {
+        if (IsDead) return;
+        
+        // Nếu có buff Y tế, giảm sát thương bẫy
+        if (statusEffectManager != null)
+        {
+            totalDamage *= statusEffectManager.GetTrapDamageMultiplier();
+        }
+        
+        StartCoroutine(DamageOverTimeRoutine(totalDamage, duration));
+    }
+
+    private System.Collections.IEnumerator DamageOverTimeRoutine(float totalDamage, float duration)
+    {
+        isTrapped = true; // Khóa di chuyển
+        OnTakeDamage?.Invoke(); // Báo hiệu bị thương để kích hoạt animation Hurt ban đầu
+        
+        float damagePerSecond = totalDamage / duration;
+        float elapsed = 0f;
+        
+        while (elapsed < duration && !IsDead)
+        {
+            currentHealth -= damagePerSecond * Time.deltaTime;
+            currentHealth = Mathf.Max(0f, currentHealth);
+            OnHealthChanged?.Invoke(currentHealth);
+            
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        
+        if (currentHealth <= 0f)
+        {
+            OnDeath?.Invoke();
+        }
+        
+        isTrapped = false; // Mở khóa di chuyển sau khi hết kẹp
     }
 
     public void Heal(float amount)
