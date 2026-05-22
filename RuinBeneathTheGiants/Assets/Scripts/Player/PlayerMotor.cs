@@ -9,6 +9,7 @@ public class PlayerMotor : MonoBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float runMultiplier = 1.5f; // Tốc độ nhân lên khi chạy
     [SerializeField] private float jumpForce = 12f;
     [SerializeField] private float acceleration = 20f;
     [SerializeField] private float deceleration = 25f;
@@ -22,6 +23,12 @@ public class PlayerMotor : MonoBehaviour
     public bool IsGrounded { get; private set; }
     
     private float moveInput;
+    private bool isRunning;
+
+    public void SetIsRunning(bool run)
+    {
+        isRunning = run;
+    }
 
     private void Awake()
     {
@@ -62,7 +69,8 @@ public class PlayerMotor : MonoBehaviour
     /// </summary>
     private void ApplyMovement()
     {
-        float targetSpeed = moveInput * moveSpeed;
+        float currentMaxSpeed = isRunning ? moveSpeed * runMultiplier : moveSpeed;
+        float targetSpeed = moveInput * currentMaxSpeed;
         float speedDiff = targetSpeed - rb.linearVelocity.x;
         float rate = Mathf.Abs(targetSpeed) > 0.01f ? acceleration : deceleration;
         float movement = speedDiff * rate * Time.fixedDeltaTime;

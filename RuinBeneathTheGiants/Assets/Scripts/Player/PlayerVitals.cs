@@ -30,9 +30,49 @@ public class PlayerVitals : MonoBehaviour
     [SerializeField] private float currentHealth = 100f;
     [SerializeField] private float maxStamina = 100f;
     [SerializeField] private float currentStamina = 100f;
+    [SerializeField] private float staminaDrainRate = 15f; // Tốc độ tụt stamina khi chạy
+    [SerializeField] private float staminaRegenRate = 10f; // Tốc độ hồi stamina
 
     public bool IsDead => currentHealth <= 0f;
-    public bool IsExhausted => currentStamina <= 0f;
+    
+    private bool isExhausted = false;
+    public bool IsExhausted => isExhausted;
+    
+    public float MaxHealth => maxHealth;
+    public float MaxStamina => maxStamina;
+
+    public void DrainStaminaContinuous()
+    {
+        if (isExhausted || IsDead) return;
+        
+        currentStamina -= staminaDrainRate * Time.deltaTime;
+        if (currentStamina <= 0f)
+        {
+            currentStamina = 0f;
+            isExhausted = true; // Bắt đầu trạng thái kiệt sức
+            OnExhausted?.Invoke();
+            StartCoroutine(ExhaustionRecoveryRoutine()); // Khóa di chuyển 2.5 giây
+        }
+        OnStaminaChanged?.Invoke(currentStamina);
+    }
+
+    private System.Collections.IEnumerator ExhaustionRecoveryRoutine()
+    {
+        yield return new WaitForSeconds(2.5f);
+        isExhausted = false;
+    }
+
+    public void RegenStaminaContinuous()
+    {
+        if (IsDead || currentStamina >= maxStamina) return;
+        
+        currentStamina += staminaRegenRate * Time.deltaTime;
+        if (currentStamina >= maxStamina)
+        {
+            currentStamina = maxStamina;
+        }
+        OnStaminaChanged?.Invoke(currentStamina);
+    }
 
     public void TakeDamage(float damage)
     {
