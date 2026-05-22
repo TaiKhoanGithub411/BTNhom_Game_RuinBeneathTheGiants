@@ -9,4 +9,13 @@ public class ItemDatabase : ScriptableObject
     [SerializeField] private ItemData[] items;
 
     public ItemData[] Items => items;
+
+    /// <summary>
+    /// Lấy một vật phẩm ngẫu nhiên từ cơ sở dữ liệu.
+    /// </summary>
+    public ItemData GetRandomItem()
+    {
+        if (items == null || items.Length == 0) return null;
+        return items[Random.Range(0, items.Length)];
+    }
 }

@@ -13,10 +13,36 @@ public class ItemPickup : MonoBehaviour
     private PlayerVitals cachedPlayerVitals;
     private float spawnTime;
     private bool isConsumed;
+    
+    public void Initialize(ItemData data)
+    {
+        this.itemData = data;
+        this.spawnTime = Time.time;// Tính lại thời gian tồn tại từ lúc được spawn ra
+
+        // Tự động cập nhật hình ảnh của vật phẩm dựa trên dữ liệu mới
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer != null && data != null)
+        {
+            spriteRenderer.sprite = data.Icon;
+        }
+    }
 
     private void Awake()
     {
         spawnTime = Time.time;
+    }
+
+    private void Start()
+    {
+        // Nếu itemData đã được gán sẵn trong Inspector (không qua Initialize), tự động cập nhật hình ảnh khi bắt đầu game
+        if (itemData != null)
+        {
+            SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+            if (spriteRenderer != null && spriteRenderer.sprite == null)
+            {
+                spriteRenderer.sprite = itemData.Icon;
+            }
+        }
     }
 
     private void Update()
