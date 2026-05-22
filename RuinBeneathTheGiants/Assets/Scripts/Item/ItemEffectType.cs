@@ -2,10 +2,12 @@ using UnityEngine;
 
 /// <summary>
 /// Kiểu hiệu ứng mà item có thể mang theo.
-/// Mỗi item chỉ có đúng 1 hiệu ứng: hoặc hồi máu, hoặc hồi thể lực.
 /// </summary>
 public enum ItemEffectType
 {
-    HealthRestore,
-    StaminaRestore
+    HealthRestore,       // Hồi máu
+    StaminaRestore,      // Hồi thể lực
+    PoisonOverTime,      // Trúng độc (trừ máu từ từ)
+    PoisonImmunity,      // Miễn nhiễm độc
+    TrapResistance       // Giảm sát thương bẫy
 }
