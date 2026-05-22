@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f3b16ee27cf7f4a0b9e02c3366028bb, type: 3}
+  m_Name: Kim_tiem_green
+  m_EditorClassIdentifier: Assembly-CSharp::ItemData
+  itemName: KimTiemGreen
+  icon: {fileID: -8956795710997249776, guid: b6ea055c453f5e82b87bae3b40e3b7fe, type: 3}
+  effects:
+  - EffectType: 1
+    Value: 50
+    Duration: 0
+  lifetime: 10

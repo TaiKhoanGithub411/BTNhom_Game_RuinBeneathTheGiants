@@ -7,13 +7,14 @@ using UnityEngine;
 /// Lưu ý: lớp này không phát âm thanh nữa. Âm thanh đã được tách hoàn toàn sang
 /// `AudioManager` để giữ đúng nguyên tắc phân tách trách nhiệm.
 /// </summary>
-[RequireComponent(typeof(PlayerMotor), typeof(PlayerVitals))]
+[RequireComponent(typeof(PlayerMotor), typeof(PlayerVitals), typeof(StatusEffectManager))]
 public class PlayerController : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private PlayerMotor motor;
     [SerializeField] private PlayerVitals vitals;
-    [SerializeField] private Animator animator; // Dùng để kết nối với cái Animator bạn vừa tạo
+    [SerializeField] private Animator animator;
+    [SerializeField] private StatusEffectManager statusEffects;
 
     private void Awake()
     {
@@ -22,6 +23,7 @@ public class PlayerController : MonoBehaviour
         if (motor == null) motor = GetComponent<PlayerMotor>();
         if (vitals == null) vitals = GetComponent<PlayerVitals>();
         if (animator == null) animator = GetComponent<Animator>();
+        if (statusEffects == null) statusEffects = GetComponent<StatusEffectManager>();
 
         // Đăng ký lắng nghe sự kiện mất máu từ Vitals.
         // Controller chỉ phản ứng về mặt animation, không can thiệp vào âm thanh.
@@ -74,8 +76,8 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.A)) horizontalInput -= 1f;
         if (Input.GetKey(KeyCode.D)) horizontalInput += 1f;
 
-        // Nếu đang kiệt sức (Exhausted), ép buộc dừng lại không cho di chuyển
-        if (vitals.IsExhausted)
+        // Nếu đang kiệt sức (Exhausted) hoặc bị kẹp bẫy, ép buộc dừng lại không cho di chuyển
+        if (vitals.IsExhausted || vitals.IsTrapped)
         {
             horizontalInput = 0f;
         }
@@ -134,8 +136,6 @@ public class PlayerController : MonoBehaviour
         // Cập nhật các biến trạng thái mới (Sinh tồn)
         animator.SetBool("IsDead", vitals.IsDead);
         animator.SetBool("IsExhausted", vitals.IsExhausted);
-
-        // Status Effect: Sẽ được update ở Phase 2 theo AGENTS.md, tạm thời mặc định false.
-        animator.SetBool("IsInfected", false);
+        animator.SetBool("IsTrapped", vitals.IsTrapped);
     }
 }

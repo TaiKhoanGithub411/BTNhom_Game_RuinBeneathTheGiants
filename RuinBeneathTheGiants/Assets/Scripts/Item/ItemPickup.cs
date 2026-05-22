@@ -2,7 +2,7 @@ using UnityEngine;
 
 /// <summary>
 /// Item hiện diện trong world. Khi Player chạm vào sẽ tự động kích hoạt
-/// hiệu ứng rồi biến mất.
+/// toàn bộ hiệu ứng rồi biến mất.
 /// </summary>
 [RequireComponent(typeof(Collider2D))]
 public class ItemPickup : MonoBehaviour
@@ -10,16 +10,14 @@ public class ItemPickup : MonoBehaviour
     [Header("Data")]
     [SerializeField] private ItemData itemData;
 
-    private PlayerVitals cachedPlayerVitals;
     private float spawnTime;
     private bool isConsumed;
     
     public void Initialize(ItemData data)
     {
         this.itemData = data;
-        this.spawnTime = Time.time;// Tính lại thời gian tồn tại từ lúc được spawn ra
+        this.spawnTime = Time.time;
 
-        // Tự động cập nhật hình ảnh của vật phẩm dựa trên dữ liệu mới
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer != null && data != null)
         {
@@ -34,7 +32,6 @@ public class ItemPickup : MonoBehaviour
 
     private void Start()
     {
-        // Nếu itemData đã được gán sẵn trong Inspector (không qua Initialize), tự động cập nhật hình ảnh khi bắt đầu game
         if (itemData != null)
         {
             SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
@@ -60,22 +57,38 @@ public class ItemPickup : MonoBehaviour
         if (isConsumed || itemData == null) return;
 
         PlayerVitals playerVitals = other.GetComponentInParent<PlayerVitals>();
+        StatusEffectManager statusEffects = other.GetComponentInParent<StatusEffectManager>();
+        
         if (playerVitals == null) return;
 
-        ApplyEffect(playerVitals);
+        ApplyEffects(playerVitals, statusEffects);
         Consume();
     }
 
-    private void ApplyEffect(PlayerVitals playerVitals)
+    private void ApplyEffects(PlayerVitals vitals, StatusEffectManager status)
     {
-        switch (itemData.EffectType)
+        if (itemData.Effects == null) return;
+
+        foreach (var effect in itemData.Effects)
         {
-            case ItemEffectType.HealthRestore:
-                playerVitals.Heal(itemData.Value);
-                break;
-            case ItemEffectType.StaminaRestore:
-                playerVitals.RestoreStamina(itemData.Value);
-                break;
+            switch (effect.EffectType)
+            {
+                case ItemEffectType.HealthRestore:
+                    vitals.Heal(effect.Value);
+                    break;
+                case ItemEffectType.StaminaRestore:
+                    vitals.RestoreStamina(effect.Value);
+                    break;
+                case ItemEffectType.PoisonOverTime:
+                    if (status != null) status.ApplyPoison(effect.Value, effect.Duration);
+                    break;
+                case ItemEffectType.PoisonImmunity:
+                    if (status != null) status.ApplyPoisonImmunity(effect.Duration);
+                    break;
+                case ItemEffectType.TrapResistance:
+                    if (status != null) status.ApplyTrapResistance(effect.Duration);
+                    break;
+            }
         }
     }
 
@@ -85,3 +98,4 @@ public class ItemPickup : MonoBehaviour
         Destroy(gameObject);
     }
 }
+
