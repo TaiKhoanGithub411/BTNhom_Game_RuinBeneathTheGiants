@@ -3,6 +3,9 @@ using UnityEngine;
 /// <summary>
 /// Lớp chịu trách nhiệm đọc Input của người chơi và điều phối các lệnh
 /// sang các lớp hệ thống tương ứng (PlayerMotor cho vật lý, PlayerVitals cho máu/stamina).
+///
+/// Lưu ý: lớp này không phát âm thanh nữa. Âm thanh đã được tách hoàn toàn sang
+/// `AudioManager` để giữ đúng nguyên tắc phân tách trách nhiệm.
 /// </summary>
 [RequireComponent(typeof(PlayerMotor), typeof(PlayerVitals))]
 public class PlayerController : MonoBehaviour
@@ -14,33 +17,44 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        // Cache lại component theo đúng quy ước
+        // Cache lại component theo đúng quy ước.
+        // Mỗi component xử lý một nhiệm vụ rõ ràng để code dễ đọc và dễ bảo trì.
         if (motor == null) motor = GetComponent<PlayerMotor>();
         if (vitals == null) vitals = GetComponent<PlayerVitals>();
         if (animator == null) animator = GetComponent<Animator>();
 
-        // Đăng ký lắng nghe sự kiện mất máu từ Vitals
-        if (vitals != null) vitals.OnTakeDamage += TriggerHurtAnimation;
+        // Đăng ký lắng nghe sự kiện mất máu từ Vitals.
+        // Controller chỉ phản ứng về mặt animation, không can thiệp vào âm thanh.
+        if (vitals != null)
+        {
+            vitals.OnTakeDamage += TriggerHurtAnimation;
+        }
     }
 
     private void OnDestroy()
     {
-        // Hủy đăng ký khi script bị xóa để tránh lỗi bộ nhớ (Memory Leak)
-        if (vitals != null) vitals.OnTakeDamage -= TriggerHurtAnimation;
+        // Hủy đăng ký khi script bị xóa để tránh lỗi bộ nhớ (Memory Leak).
+        // Đây là bước quan trọng khi làm việc với event để tránh object cũ
+        // vẫn bị giữ tham chiếu sau khi đã bị destroy.
+        if (vitals != null)
+        {
+            vitals.OnTakeDamage -= TriggerHurtAnimation;
+        }
     }
 
     private void TriggerHurtAnimation()
     {
-        // Kích hoạt biến Trigger "Hurt" trong Animator
+        // Kích hoạt biến Trigger "Hurt" trong Animator.
+        // Animation là phản ứng hình ảnh, còn âm thanh sẽ được AudioManager xử lý riêng.
         if (animator != null) animator.SetTrigger("Hurt");
     }
 
     private void Update()
     {
-        // Luôn đồng bộ dữ liệu sang Animator trước (kể cả khi đã chết để nó biết mà chạy animation Dead)
+        // Luôn đồng bộ dữ liệu sang Animator trước (kể cả khi đã chết để nó biết mà chạy animation Dead).
         UpdateAnimator();
 
-        // Nếu nhân vật chết thì không cho thao tác gì cả
+        // Nếu nhân vật chết thì không cho thao tác gì cả.
         if (vitals.IsDead)
         {
             motor.SetMoveInput(0f);
@@ -58,7 +72,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(KeyCode.A)) horizontalInput -= 1f;
         if (Input.GetKey(KeyCode.D)) horizontalInput += 1f;
 
-        // Chuyển giá trị ngang sang Motor xử lý vật lý
+        // Chuyển giá trị ngang sang Motor xử lý vật lý.
         motor.SetMoveInput(horizontalInput);
     }
 
@@ -66,7 +80,9 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.W))
         {
-            // Ví dụ: Nhảy tốn 10 Stamina. Chỉ nhảy được khi còn Stamina
+            // Ví dụ: Nhảy tốn 10 Stamina. Chỉ nhảy được khi còn Stamina.
+            // Việc phát âm thanh nhảy, nếu có, nên do AudioManager nghe event phù hợp
+            // hoặc do một event riêng cho hành động nhảy.
             if (vitals.ConsumeStamina(10f))
             {
                 motor.Jump();
@@ -78,15 +94,15 @@ public class PlayerController : MonoBehaviour
     {
         if (animator == null) return;
 
-        // Cập nhật các biến cơ bản
+        // Cập nhật các biến cơ bản.
         animator.SetFloat("Speed", motor.GetCurrentSpeed());
         animator.SetBool("IsGrounded", motor.IsGrounded);
-        
-        // Cập nhật các biến trạng thái mới (Sinh tồn)
+
+        // Cập nhật các biến trạng thái mới (Sinh tồn).
         animator.SetBool("IsDead", vitals.IsDead);
         animator.SetBool("IsExhausted", vitals.IsExhausted);
-        
-        // Status Effect: Sẽ được update ở Phase 2 theo AGENTS.md, tạm thời mặc định false
-        animator.SetBool("IsInfected", false); 
+
+        // Status Effect: Sẽ được update ở Phase 2 theo AGENTS.md, tạm thời mặc định false.
+        animator.SetBool("IsInfected", false);
     }
 }

@@ -2,20 +2,28 @@ using System;
 using UnityEngine;
 
 /// <summary>
-/// Lớp chịu trách nhiệm ĐỘC QUYỀN về Sinh Lực (Sinh tồn):
-/// - Máu, Stamina, Sát thương, Chết.
-/// - Phát tín hiệu (Event) ra bên ngoài khi có thay đổi.
+/// Lớp này chỉ chịu trách nhiệm về chỉ số sống còn của nhân vật.
+///
+/// Nguyên tắc kiến trúc ở đây là:
+/// - `PlayerVitals` KHÔNG phát âm thanh.
+/// - `PlayerVitals` chỉ thay đổi dữ liệu và phát event báo cho bên ngoài biết.
+/// - Các hệ thống khác như UI, Audio, GameManager sẽ tự lắng nghe event này và xử lý phần việc của mình.
+///
+/// Cách làm này giúp mã dễ bảo trì hơn vì logic gameplay và logic âm thanh không bị trộn lẫn.
 /// </summary>
 public class PlayerVitals : MonoBehaviour
 {
-    // =========================
-    // C# Events (Để HUD, Âm thanh, Game Manager lắng nghe)
-    // =========================
+    // =========================================================
+    // Events
+    // ---------------------------------------------------------
+    // Các event này là "tín hiệu". Bản thân class không biết ai
+    // sẽ nghe, nó chỉ báo rằng một trạng thái nào đó đã xảy ra.
+    // =========================================================
     public event Action<float> OnHealthChanged;
     public event Action<float> OnStaminaChanged;
     public event Action OnDeath;
     public event Action OnExhausted;
-    public event Action OnTakeDamage; // Sự kiện mới khi bị nhận sát thương
+    public event Action OnTakeDamage;
 
     [Header("Stats Settings")]
     [SerializeField] private float maxHealth = 100f;
@@ -30,10 +38,13 @@ public class PlayerVitals : MonoBehaviour
     {
         if (damage <= 0f || IsDead) return;
 
+        // Trừ máu trước, sau đó thông báo cho hệ thống khác biết trạng thái đã đổi.
         currentHealth = Mathf.Max(0f, currentHealth - damage);
         OnHealthChanged?.Invoke(currentHealth);
-        OnTakeDamage?.Invoke(); // Kích hoạt sự kiện Hurt
+        OnTakeDamage?.Invoke();
 
+        // Nếu máu về 0, chỉ phát event OnDeath.
+        // Phần phát nhạc/game over sẽ do AudioManager hoặc hệ thống game điều khiển.
         if (currentHealth <= 0f)
         {
             OnDeath?.Invoke();
@@ -43,7 +54,8 @@ public class PlayerVitals : MonoBehaviour
     public void Heal(float amount)
     {
         if (amount <= 0f || IsDead) return;
-        
+
+        // Chỉ cập nhật dữ liệu và phát event, không xử lý âm thanh ở đây.
         currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
         OnHealthChanged?.Invoke(currentHealth);
     }
@@ -54,26 +66,31 @@ public class PlayerVitals : MonoBehaviour
     public bool ConsumeStamina(float amount)
     {
         if (amount <= 0f || IsDead) return false;
-        
+
         if (currentStamina >= amount)
         {
+            // Trừ stamina và báo cho hệ thống lắng nghe biết.
             currentStamina -= amount;
             OnStaminaChanged?.Invoke(currentStamina);
-            
-            if (currentStamina <= 0f) 
+
+            // Khi stamina chạm 0, phát event để bên ngoài tự quyết định
+            // có hiển thị cảnh báo, phát âm thanh hay xử lý gì khác.
+            if (currentStamina <= 0f)
             {
                 OnExhausted?.Invoke();
             }
+
             return true;
         }
-        
+
         return false;
     }
 
     public void RestoreStamina(float amount)
     {
         if (amount <= 0f || IsDead) return;
-        
+
+        // Giống các hàm khác, chỉ cập nhật trạng thái và phát event.
         currentStamina = Mathf.Min(maxStamina, currentStamina + amount);
         OnStaminaChanged?.Invoke(currentStamina);
     }
