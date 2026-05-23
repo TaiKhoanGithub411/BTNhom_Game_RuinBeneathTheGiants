@@ -1,5 +1,4 @@
 using UnityEngine;
-using BTNhom.Item; // Cần dùng để gọi ItemPickup
 
 namespace BTNhom.MapGen
 {
