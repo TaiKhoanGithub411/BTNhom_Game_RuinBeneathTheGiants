@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6b2c603f17ee468e8999e0f30823810, type: 3}
+  m_Name: TrapDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.TrapDatabase
+  traps:
+  - data: {fileID: 11400000, guid: a61f67c10d04e40dea4254f91f380b83, type: 2}
+    prefab: {fileID: 7314422157984635174, guid: 3f8b38e713b7b2945a7b0cbad8b04e80, type: 3}
+  - data: {fileID: 11400000, guid: e8306f9051b0f0f2090c1112d53182eb, type: 2}
+    prefab: {fileID: 8403552216761415976, guid: 86d9c40b25d6d0f469aaaa5a6f3531b6, type: 3}

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BearTrap
   m_EditorClassIdentifier: Assembly-CSharp::TrapData
   trapName: BearTrap
-  activeSprite: {fileID: -894080948239011975, guid: 7e4541384a90806b28bbf95125dd150c, type: 3}
+  activeSprite: {fileID: 6489366200590883201, guid: 7e4541384a90806b28bbf95125dd150c, type: 3}
   triggeredSprite: {fileID: 2435301500484193355, guid: 7e4541384a90806b28bbf95125dd150c, type: 3}
-  damage: 15
+  damage: 10
   lifetime: 15

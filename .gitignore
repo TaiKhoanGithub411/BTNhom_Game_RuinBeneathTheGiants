@@ -56,3 +56,5 @@ RuinBeneathTheGiants/[Aa]ssets/Unity.VisualScripting.Generated/
 # JetBrains Rider
 RuinBeneathTheGiants/[Aa]ssets/Plugins/Editor/JetBrains*
 RuinBeneathTheGiants/*.DotSettings.user
+
+.codegraph/

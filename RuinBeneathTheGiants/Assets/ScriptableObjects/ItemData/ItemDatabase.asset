@@ -22,3 +22,20 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2b388e6aacac34c1c9d51b38a1afd1a4, type: 2}
   - {fileID: 11400000, guid: 2b388e6aacac34c1c9d51b38a1afd1a4, type: 2}
   - {fileID: 11400000, guid: 2b388e6aacac34c1c9d51b38a1afd1a4, type: 2}
+  itemEntries:
+  - data: {fileID: 11400000, guid: 905510fa5b1b5a87d844a242a5646ad5, type: 2}
+    prefab: {fileID: 8403552216761415976, guid: d6e9c101c6fc86745ab78117ce1a0d55, type: 3}
+  - data: {fileID: 11400000, guid: 1bf56f9f76604d6fd8a8496eaf7f6147, type: 2}
+    prefab: {fileID: 8403552216761415976, guid: 0a6079c18a6f74f4ea5c4707285ec64e, type: 3}
+  - data: {fileID: 11400000, guid: 2b388e6aacac34c1c9d51b38a1afd1a4, type: 2}
+    prefab: {fileID: 8403552216761415976, guid: 4124a454d49382041be06c7147b718cf, type: 3}
+  - data: {fileID: 11400000, guid: 580f7b9dddb8b220a8e496c53b1239df, type: 2}
+    prefab: {fileID: 8403552216761415976, guid: 78cd864c60230ce49922fe3951bc807d, type: 3}
+  - data: {fileID: 11400000, guid: 16103339b375336fbaceb71b50b0abb6, type: 2}
+    prefab: {fileID: 8403552216761415976, guid: 41ca06f939ac2da41ad6bf863406d848, type: 3}
+  - data: {fileID: 11400000, guid: 58ed12848cfee674aa9d87ed4c49fbc9, type: 2}
+    prefab: {fileID: 8403552216761415976, guid: b2b4d96fb6460a949a67cfdf90102bb6, type: 3}
+  - data: {fileID: 11400000, guid: b247c54245c29bd4e943074652490860, type: 2}
+    prefab: {fileID: 8403552216761415976, guid: cd2394bcc175c4e4fb278c30f3065a9c, type: 3}
+  - data: {fileID: 11400000, guid: 395017e437db58864b008b660a773341, type: 2}
+    prefab: {fileID: 8403552216761415976, guid: ff4f5b014dbe7fb43b0499474839729a, type: 3}

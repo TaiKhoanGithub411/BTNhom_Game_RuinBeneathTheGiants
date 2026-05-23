@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cd3ad3021652a93892a4a83a22bc1c5, type: 3}
+  m_Name: Chunk_03_Data
+  m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.ChunkData
+  chunkName: Chunk 03
+  prefab: {fileID: 7044726604103267064, guid: c3661c0204ab1b01b8e57a536ecaff83, type: 3}
+  width: 20
+  minDifficulty: 0
+  maxDifficulty: 0
