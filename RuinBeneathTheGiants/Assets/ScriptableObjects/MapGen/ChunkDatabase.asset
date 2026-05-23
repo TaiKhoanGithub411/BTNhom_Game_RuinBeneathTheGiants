@@ -12,4 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9789afe827d53c5a0bb9e68b5f3ea510, type: 3}
   m_Name: ChunkDatabase
   m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.ChunkDatabase
-  chunks: []
+  chunks:
+  - {fileID: 11400000, guid: 38694502464b792d384f05a0a22f3338, type: 2}
+  - {fileID: 11400000, guid: b3b37b2e835421a29a5f0f99c75e62b3, type: 2}
+  - {fileID: 11400000, guid: 3b6e8c80ed18d5c14b6e65cb8fbe7405, type: 2}
+  - {fileID: 11400000, guid: 1b158f2f6d471107d88229bd5ff409df, type: 2}
+  - {fileID: 11400000, guid: 0da1dbf04115dd6af97a56a7493bc5ba, type: 2}
