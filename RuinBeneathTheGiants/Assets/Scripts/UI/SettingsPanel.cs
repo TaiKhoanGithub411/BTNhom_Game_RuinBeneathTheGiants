@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class SettingsPanelr : MonoBehaviour
+public class SettingsPanel : MonoBehaviour
 {
     [Header("UI Elements Root")]
     public GameObject panelRoot;      // Khung chứa bảng Settings vuông

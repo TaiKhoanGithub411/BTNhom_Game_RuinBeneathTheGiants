@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b925e3a6b220e34ea932965a0843ef4c, type: 3}
+  m_Name: MushroomTrap
+  m_EditorClassIdentifier: Assembly-CSharp::MushroomTrapData
+  trapName: MushroomTrap
+  activeSprite: {fileID: 357749872346554099, guid: 49bddb43eb5bb1851b30abbdf7e0e836, type: 3}
+  triggeredSprite: {fileID: 357749872346554099, guid: 49bddb43eb5bb1851b30abbdf7e0e836, type: 3}
+  damage: 10
+  lifetime: 15
+  dotDamage: 15
+  dotDuration: 3
