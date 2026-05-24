@@ -16,4 +16,4 @@ MonoBehaviour:
   activeSprite: {fileID: 6489366200590883201, guid: 7e4541384a90806b28bbf95125dd150c, type: 3}
   triggeredSprite: {fileID: 2435301500484193355, guid: 7e4541384a90806b28bbf95125dd150c, type: 3}
   damage: 10
-  lifetime: 15
+  lifetime: 0

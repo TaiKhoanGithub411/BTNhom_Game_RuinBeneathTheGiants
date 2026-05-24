@@ -711,7 +711,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 989695017654954983}
-  m_BodyType: 0
+  m_BodyType: 2
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -791,26 +791,6 @@ CompositeCollider2D:
         Y: -50000000
       - X: 220000000
         Y: -50000000
-    - - X: 160000000
-        Y: -20000000
-      - X: 140000000
-        Y: -20000000
-      - X: 140000000
-        Y: -10000000
-      - X: 120000000
-        Y: -10000000
-      - X: 120000000
-        Y: -30000000
-      - X: 110000000
-        Y: -30000000
-      - X: 110000000
-        Y: -40000000
-      - X: 120000000
-        Y: -40000000
-      - X: 120000000
-        Y: -50000000
-      - X: 160000000
-        Y: -50000000
     - - X: 100000000
         Y: -40000000
       - X: 90000000
@@ -831,18 +811,28 @@ CompositeCollider2D:
         Y: -50000000
       - X: 100000000
         Y: -50000000
+    - - X: 160000000
+        Y: -20000000
+      - X: 140000000
+        Y: -20000000
+      - X: 140000000
+        Y: -10000000
+      - X: 120000000
+        Y: -10000000
+      - X: 120000000
+        Y: -30000000
+      - X: 110000000
+        Y: -30000000
+      - X: 110000000
+        Y: -40000000
+      - X: 120000000
+        Y: -40000000
+      - X: 120000000
+        Y: -50000000
+      - X: 160000000
+        Y: -50000000
   m_CompositePaths:
     m_Paths:
-    - - {x: 9.99997, y: -5}
-      - {x: 9.99997, y: -4}
-      - {x: 9, y: -3.9999704}
-      - {x: 8.99997, y: -3}
-      - {x: 8, y: -2.9999707}
-      - {x: 7.9999704, y: -2}
-      - {x: 6, y: -1.9999707}
-      - {x: 5.999971, y: -1}
-      - {x: 4, y: -1.0000293}
-      - {x: 4.000029, y: -5}
     - - {x: 21.999971, y: -5}
       - {x: 21.999971, y: -2}
       - {x: 21, y: -1.9999707}
@@ -863,6 +853,16 @@ CompositeCollider2D:
       - {x: 11.00003, y: -4}
       - {x: 12, y: -4.0000296}
       - {x: 12.00003, y: -5}
+    - - {x: 9.99997, y: -5}
+      - {x: 9.99997, y: -4}
+      - {x: 9, y: -3.9999704}
+      - {x: 8.99997, y: -3}
+      - {x: 8, y: -2.9999707}
+      - {x: 7.9999704, y: -2}
+      - {x: 6, y: -1.9999707}
+      - {x: 5.999971, y: -1}
+      - {x: 4, y: -1.0000293}
+      - {x: 4.000029, y: -5}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
@@ -1033,7 +1033,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4143092705458787717}
   - {fileID: 6059557538307476545}
   - {fileID: 3875942736463170323}
   - {fileID: 8337215123145831308}
@@ -1165,49 +1164,3 @@ Transform:
   - {fileID: 2232512925432623661}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &8439512714683091936
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4143092705458787717}
-  - component: {fileID: 6382028330535149325}
-  m_Layer: 0
-  m_Name: SP_Item_01
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4143092705458787717
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8439512714683091936}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 11.45, y: -2.52, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2232512925432623661}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6382028330535149325
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8439512714683091936}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59b1209915aaaeec59f3ba7ce50b15e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.SpawnPoint
-  spawnType: 0
-  spawnChance: 1

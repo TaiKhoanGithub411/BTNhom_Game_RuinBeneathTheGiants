@@ -77,7 +77,9 @@ public class PlayerVitals : MonoBehaviour
     {
         if (IsDead || currentStamina >= maxStamina) return;
         
-        currentStamina += staminaRegenRate * Time.deltaTime;
+        float regenMultiplier = statusEffectManager != null ? statusEffectManager.StaminaRegenMultiplier : 1f;
+        currentStamina += (staminaRegenRate * regenMultiplier) * Time.deltaTime;
+
         if (currentStamina >= maxStamina)
         {
             currentStamina = maxStamina;
@@ -96,6 +98,23 @@ public class PlayerVitals : MonoBehaviour
 
         // Nếu máu về 0, chỉ phát event OnDeath.
         // Phần phát nhạc/game over sẽ do AudioManager hoặc hệ thống game điều khiển.
+        if (currentHealth <= 0f)
+        {
+            OnDeath?.Invoke();
+        }
+    }
+
+    /// <summary>
+    /// Nhận sát thương ngầm (không kích hoạt event OnTakeDamage để tránh spam animation).
+    /// Dùng cho sát thương theo thời gian như Độc.
+    /// </summary>
+    public void TakeDamageSilent(float damage)
+    {
+        if (damage <= 0f || IsDead) return;
+
+        currentHealth = Mathf.Max(0f, currentHealth - damage);
+        OnHealthChanged?.Invoke(currentHealth);
+
         if (currentHealth <= 0f)
         {
             OnDeath?.Invoke();
@@ -143,6 +162,23 @@ public class PlayerVitals : MonoBehaviour
         }
         
         isTrapped = false; // Mở khóa di chuyển sau khi hết kẹp
+    }
+
+    /// <summary>
+    /// Chịu va chạm từ bẫy (khóa di chuyển trong 1 khoảng thời gian ngắn và phát hoạt ảnh Hurt).
+    /// </summary>
+    public void TakeTrapImpact(float lockDuration = 1.5f)
+    {
+        if (IsDead) return;
+        StartCoroutine(TrapLockRoutine(lockDuration));
+    }
+
+    private System.Collections.IEnumerator TrapLockRoutine(float duration)
+    {
+        isTrapped = true;
+        OnTakeDamage?.Invoke(); // Trigger Hurt animation
+        yield return new WaitForSeconds(duration);
+        isTrapped = false;
     }
 
     public void Heal(float amount)

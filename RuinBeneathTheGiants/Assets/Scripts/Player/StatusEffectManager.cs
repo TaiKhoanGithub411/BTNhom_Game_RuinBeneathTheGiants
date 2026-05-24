@@ -21,6 +21,11 @@ public class StatusEffectManager : MonoBehaviour
 
     // Tham chiếu Coroutine để có thể dừng nếu cần
     private Coroutine poisonCoroutine;
+    private Coroutine bleedCoroutine;
+
+    // Các biến ảnh hưởng chỉ số phụ
+    private float staminaRegenMultiplier = 1f;
+    public float StaminaRegenMultiplier => staminaRegenMultiplier;
 
     private void Awake()
     {
@@ -83,9 +88,8 @@ public class StatusEffectManager : MonoBehaviour
 
         while (elapsed < duration && !playerVitals.IsDead)
         {
-            // Trừ máu từ từ (Gây sát thương nhưng không phát event Hurt để khỏi giật cục)
-            // Thay vào đó dùng hàm TakeDamage ngầm hoặc cập nhật trực tiếp
-            playerVitals.TakeDamage(damagePerSecond * Time.deltaTime);
+            // Trừ máu từ từ ngầm (không phát event Hurt để khỏi giật cục và kẹt hoạt ảnh)
+            playerVitals.TakeDamageSilent(damagePerSecond * Time.deltaTime);
 
             elapsed += Time.deltaTime;
             yield return null;
@@ -124,6 +128,37 @@ public class StatusEffectManager : MonoBehaviour
     public float GetTrapDamageMultiplier()
     {
         return hasTrapResistance ? 0.5f : 1f;
+    }
+
+    /// <summary>
+    /// Kích hoạt hiệu ứng Chảy máu và Khập khiễng (Từ Bẫy Gấu)
+    /// </summary>
+    public void ApplyBleedAndCripple(float totalDamage, float duration, float staminaPenaltyMult = 0.8f)
+    {
+        if (bleedCoroutine != null)
+        {
+            StopCoroutine(bleedCoroutine);
+        }
+        bleedCoroutine = StartCoroutine(BleedAndCrippleRoutine(totalDamage, duration, staminaPenaltyMult));
+    }
+
+    private IEnumerator BleedAndCrippleRoutine(float totalDamage, float duration, float staminaPenaltyMult)
+    {
+        // Giảm tốc độ hồi Stamina
+        staminaRegenMultiplier = staminaPenaltyMult;
+
+        float damagePerSecond = totalDamage / duration;
+        float elapsed = 0f;
+
+        while (elapsed < duration && !playerVitals.IsDead)
+        {
+            playerVitals.TakeDamageSilent(damagePerSecond * Time.deltaTime);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        // Hồi phục lại tốc độ Stamina sau khi hết hiệu ứng
+        staminaRegenMultiplier = 1f;
     }
 
     // Biến trạng thái để Animator dùng (đổi màu xanh lá chẳng hạn)
