@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5cd3ad3021652a93892a4a83a22bc1c5, type: 3}
-  m_Name: Chunk_04_Data
+  m_Name: Chunk_15_Data
   m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.ChunkData
-  chunkName: Chunk 04
-  prefab: {fileID: 2518039566602608634, guid: ec3195adc7e86bf338ce948883cdf635, type: 3}
+  chunkName: Chunk 15
+  prefab: {fileID: 4196334301996763908, guid: 718b51d25f8a84f84ba3f2021f6273ab, type: 3}
   width: 20
   minDifficulty: 0
   maxDifficulty: 15

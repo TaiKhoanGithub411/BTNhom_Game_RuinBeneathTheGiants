@@ -16,4 +16,4 @@ MonoBehaviour:
   prefab: {fileID: 1052256596239082239, guid: 783139aeef0c4b05cbbc058598eb2ff2, type: 3}
   width: 20
   minDifficulty: 0
-  maxDifficulty: 0
+  maxDifficulty: 5

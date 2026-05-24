@@ -16,5 +16,5 @@ MonoBehaviour:
   baseTrapSpawnRate: 0.6
   distanceIntervalForDifficulty: 50
   maxDifficultyLevel: 15
-  trapRateIncreasePerLevel: 0.05
-  itemRateDecreasePerLevel: 0.03
+  trapRateIncreasePerLevel: 0.1
+  itemRateDecreasePerLevel: 0.05
