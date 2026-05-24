@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 489bab1f613332e49b3a0a660308820c, type: 3}
+  m_Name: BossDatabase
+  m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.BossDatabase
+  bossZones:
+  - prefab: {fileID: 8566584556793968559, guid: a3f9ef1bc7a377f4abfe8a96920990a0, type: 3}
+  - prefab: {fileID: 8076771142733295792, guid: 1f0b7b91b51afbc4681cf1ffb3fed3be, type: 3}
+  - prefab: {fileID: 1187038701900453122, guid: d3d8669429daa8b46902172c82c511ec, type: 3}

@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.ChunkData
   chunkName: Chunk 11
   prefab: {fileID: 1727739256899467445, guid: 78cb41cb0a745c605a1ac81415586189, type: 3}
-  width: 20
+  width: 14
   minDifficulty: 0
   maxDifficulty: 15
