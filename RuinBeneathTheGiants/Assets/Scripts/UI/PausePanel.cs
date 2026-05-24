@@ -1,14 +1,11 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
 
-/// <summary>
-/// Điều khiển màn Settings trên Welcome: overlay đen, âm lượng, fullscreen.
-/// Gắn script này lên GameObject SettingsUI và kéo thả reference trong Inspector.
-/// </summary>
-public class SettingsPanel : MonoBehaviour
+public class PausePanel : MonoBehaviour
 {
     private const string KeyMasterVolume = "volume_master";
     private const string KeyMusicVolume = "volume_music";
@@ -22,7 +19,7 @@ public class SettingsPanel : MonoBehaviour
     [SerializeField] private CanvasGroup contentGroup;
 
     [Header("Overlay")]
-    [SerializeField] private float overlayTargetAlpha = 0.8f;
+    [SerializeField] private float overlayTargetAlpha = 0.55f;
 
     [Header("Audio")]
     [SerializeField] private Slider masterSlider;
@@ -34,7 +31,12 @@ public class SettingsPanel : MonoBehaviour
     [SerializeField] private Button fullscreenOnButton;
 
     [Header("Navigation")]
+    [SerializeField] private Button resumeButton;
     [SerializeField] private Button backButton;
+    [SerializeField] private Button newGameButton;
+
+    [Header("Scenes")]
+    [SerializeField] private string welcomeSceneName = "Welcome";
 
     private bool isVisible;
     private Image overlayImage;
@@ -43,7 +45,9 @@ public class SettingsPanel : MonoBehaviour
     {
         CacheOverlayImage();
 
-        RegisterButton(backButton, Hide);
+        RegisterButton(resumeButton, Resume);
+        RegisterButton(backButton, BackToWelcome);
+        RegisterButton(newGameButton, NewGame);
         RegisterButton(fullscreenOffButton, () => SetFullScreen(false));
         RegisterButton(fullscreenOnButton, () => SetFullScreen(true));
 
@@ -61,14 +65,30 @@ public class SettingsPanel : MonoBehaviour
 
     private void Update()
     {
-        if (!isVisible)
+        if (!WasEscapePressed())
         {
             return;
         }
 
-        if (WasEscapePressed())
+        if (isVisible)
+        {
+            Resume();
+        }
+        else
+        {
+            Show();
+        }
+    }
+
+    public void Toggle()
+    {
+        if (isVisible)
         {
             Hide();
+        }
+        else
+        {
+            Show();
         }
     }
 
@@ -79,15 +99,14 @@ public class SettingsPanel : MonoBehaviour
             return;
         }
 
-        gameObject.SetActive(true);
         isVisible = true;
+        Time.timeScale = 0f;
 
         SetActiveSafe(overlay, true);
         SetActiveSafe(contentRoot, true);
 
         LoadSettings();
         RefreshFullScreenButtons();
-
         ApplyOverlayVisual();
         SetCanvasGroup(overlayGroup, overlayTargetAlpha, true);
         SetCanvasGroup(contentGroup, 1f, true);
@@ -100,7 +119,26 @@ public class SettingsPanel : MonoBehaviour
             return;
         }
 
-        HideImmediate();
+        isVisible = false;
+        Time.timeScale = 1f;
+        PrepareClosedState();
+    }
+
+    public void Resume()
+    {
+        Hide();
+    }
+
+    public void BackToWelcome()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(welcomeSceneName);
+    }
+
+    public void NewGame()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private void LoadSettings()
@@ -218,16 +256,10 @@ public class SettingsPanel : MonoBehaviour
 
     private void PrepareClosedState()
     {
-        isVisible = false;
         SetCanvasGroupAlpha(overlayGroup, 0f);
         SetCanvasGroupAlpha(contentGroup, 0f);
         SetActiveSafe(contentRoot, false);
         SetActiveSafe(overlay, false);
-    }
-
-    private void HideImmediate()
-    {
-        PrepareClosedState();
     }
 
     private void CacheOverlayImage()
