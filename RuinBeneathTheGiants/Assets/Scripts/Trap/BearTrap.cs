@@ -1,8 +1,9 @@
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
 /// Lớp cụ thể triển khai logic cho Bẫy Gấu (Bear Trap).
-/// Bẫy hoạt động theo cơ chế gây sát thương tức thời 1 lần khi chạm, đổi hình ảnh sập bẫy và tự hủy sau 1.5 giây.
+/// Gây khóa di chuyển ngắn (1.5s), hiệu ứng rỉ máu và giảm thể lực (10s), và mở lại sau 3s.
 /// </summary>
 public class BearTrap : TrapBase
 {
@@ -11,14 +12,22 @@ public class BearTrap : TrapBase
         // 1. Đánh dấu bẫy đã sập để vô hiệu hóa va chạm tiếp theo
         isTriggered = true;
 
-        // 2. Gây sát thương tức thời lên chỉ số máu của người chơi
-        playerVitals.TakeDamage(trapData.Damage);
+        // 2. Ép Player đứng yên chịu đòn (1.5s) và kích hoạt Hurt animation
+        playerVitals.TakeTrapImpact(1.5f);
 
-        // 3. Xử lý hiển thị trạng thái sập bẫy (Ưu tiên Animation -> Dự phòng Sprite tĩnh)
+        // 3. Gây sát thương từ từ (30% Max HP = 0.3 * MaxHealth) và giảm 20% hồi Stamina trong 10 giây
+        StatusEffectManager statusEffectManager = playerVitals.GetComponent<StatusEffectManager>();
+        if (statusEffectManager != null)
+        {
+            float bleedDamage = playerVitals.MaxHealth * 0.3f;
+            statusEffectManager.ApplyBleedAndCripple(bleedDamage, 10f, 0.8f);
+        }
+
+        // 4. Kích hoạt hoạt ảnh kẹp của bẫy
         Animator animator = GetComponent<Animator>();
         if (animator != null)
         {
-            animator.SetTrigger("Trigger");
+            animator.SetBool("IsSprung", true);
         }
         else
         {
@@ -29,12 +38,29 @@ public class BearTrap : TrapBase
             }
         }
 
-        // 4. Bẫy gấu sập sẽ biến mất sau 1.5 giây để giải phóng bộ nhớ
-        Invoke(nameof(DestroyTrap), 1.5f);
+        // 5. Bẫy gấu mở lại sau 3 giây để chờ nạn nhân tiếp theo
+        StartCoroutine(ResetTrapRoutine());
     }
 
-    private void DestroyTrap()
+    private IEnumerator ResetTrapRoutine()
     {
-        Destroy(gameObject);
+        yield return new WaitForSeconds(3f);
+        
+        isTriggered = false; // Bật lại hệ thống va chạm
+        
+        Animator animator = GetComponent<Animator>();
+        if (animator != null)
+        {
+            animator.SetBool("IsSprung", false); // Mở bẫy ra
+        }
+        else
+        {
+            // Dự phòng nếu xài Sprite tĩnh (chuyển về ảnh ban đầu)
+            SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+            if (spriteRenderer != null && trapData.ActiveSprite != null)
+            {
+                spriteRenderer.sprite = trapData.ActiveSprite;
+            }
+        }
     }
 }
