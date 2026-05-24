@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Chunk_05_Data
   m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.ChunkData
   chunkName: Chunk 05
-  prefab: {fileID: 9120327020797262359, guid: f0f10f068d79db1c1889bacfad677103, type: 3}
+  prefab: {fileID: 7290024224638182057, guid: e7ab2f76ef8ede53d9ffd78443e09d08, type: 3}
   width: 20
   minDifficulty: 0
-  maxDifficulty: 0
+  maxDifficulty: 15
