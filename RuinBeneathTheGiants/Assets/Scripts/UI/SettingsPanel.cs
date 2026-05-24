@@ -3,6 +3,9 @@ using UnityEngine.UI;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 /// <summary>
 /// Điều khiển màn Settings trên Welcome: overlay đen, âm lượng, fullscreen.
@@ -35,6 +38,7 @@ public class SettingsPanel : MonoBehaviour
 
     [Header("Navigation")]
     [SerializeField] private Button backButton;
+    [SerializeField] private Button quitButton;
 
     private bool isVisible;
     private Image overlayImage;
@@ -44,6 +48,7 @@ public class SettingsPanel : MonoBehaviour
         CacheOverlayImage();
 
         RegisterButton(backButton, Hide);
+        RegisterButton(quitButton, QuitApplication);
         RegisterButton(fullscreenOffButton, () => SetFullScreen(false));
         RegisterButton(fullscreenOnButton, () => SetFullScreen(true));
 
@@ -101,6 +106,15 @@ public class SettingsPanel : MonoBehaviour
         }
 
         HideImmediate();
+    }
+
+    public void QuitApplication()
+    {
+#if UNITY_EDITOR
+        EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 
     private void LoadSettings()
