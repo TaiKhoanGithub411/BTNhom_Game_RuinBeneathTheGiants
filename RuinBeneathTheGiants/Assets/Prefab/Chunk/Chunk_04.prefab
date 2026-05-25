@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1476563892767868582}
   - component: {fileID: 5710463319757249614}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SP_Item_02 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 529339534985714640}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 19.46, y: -0.62, z: 0}
+  m_LocalPosition: {x: 15.5, y: 0.41, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.SpawnPoint
   spawnType: 0
-  spawnChance: 1
+  spawnChance: 0.1
 --- !u!1 &567229509589280809
 GameObject:
   m_ObjectHideFlags: 0
@@ -56,7 +56,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3766341872321102065}
   - component: {fileID: 2621545140602309807}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SP_Trap_03 (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6344277198173380548}
   - component: {fileID: 9195391035734618000}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SP_Trap_03 (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,7 +152,7 @@ GameObject:
   - component: {fileID: 4873168687767123977}
   - component: {fileID: 8520641421315830847}
   - component: {fileID: 4336467315951609776}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -929,7 +929,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4373470111519849698}
   - component: {fileID: 3235929439025875385}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SP_Trap_03 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -975,7 +975,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8464159489083447766}
   - component: {fileID: 15308775433274182}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SP_Trap_03 (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1021,7 +1021,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3713322387390929283}
   - component: {fileID: 5186727696886088202}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SP_Trap_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1067,7 +1067,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8902286094669986532}
   - component: {fileID: 8665722393935838957}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SP_Trap_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1112,7 +1112,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6270125480654792892}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Chunk_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1146,7 +1146,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4176600311438464348}
   - component: {fileID: 8255925418079309541}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SP_Trap_03 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1192,7 +1192,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5958752094069716172}
   - component: {fileID: 6713037965129252642}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SP_Trap_03 (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1238,7 +1238,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2151128299926115450}
   - component: {fileID: 3948308681471403187}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SP_Trap_03 (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1274,6 +1274,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.SpawnPoint
   spawnType: 1
   spawnChance: 1
+--- !u!1 &3848422898514052322
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7888657481761625950}
+  - component: {fileID: 8970897496342889223}
+  m_Layer: 3
+  m_Name: SP_Item_02 (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7888657481761625950
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3848422898514052322}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 19.46, y: -0.62, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8114099824015963592}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8970897496342889223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3848422898514052322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59b1209915aaaeec59f3ba7ce50b15e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.SpawnPoint
+  spawnType: 0
+  spawnChance: 0.1
 --- !u!1 &4033210277873818319
 GameObject:
   m_ObjectHideFlags: 0
@@ -1284,7 +1330,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5706957906694504318}
   - component: {fileID: 5301718478336249538}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SP_Trap_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1320,6 +1366,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.SpawnPoint
   spawnType: 1
   spawnChance: 1
+--- !u!1 &4224003280568862617
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8949712201658255475}
+  - component: {fileID: 2514208361592029285}
+  m_Layer: 3
+  m_Name: SP_Boss_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8949712201658255475
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4224003280568862617}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 9.51, y: 2.67, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8114099824015963592}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2514208361592029285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4224003280568862617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59b1209915aaaeec59f3ba7ce50b15e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.SpawnPoint
+  spawnType: 2
+  spawnChance: 0.5
 --- !u!1 &5328322767482481938
 GameObject:
   m_ObjectHideFlags: 0
@@ -1330,7 +1422,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4572336406834063527}
   - component: {fileID: 4850194486251994294}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SP_Trap_03 (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1376,7 +1468,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7698902680855504018}
   - component: {fileID: 6026979852732298371}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SP_Trap_03 (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1421,7 +1513,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8114099824015963592}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1437,13 +1529,14 @@ Transform:
   m_GameObject: {fileID: 6260166556536840511}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.19, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3525101483031734143}
   - {fileID: 1850727813959681016}
   - {fileID: 1476563892767868582}
+  - {fileID: 7888657481761625950}
   - {fileID: 5706957906694504318}
   - {fileID: 8902286094669986532}
   - {fileID: 3713322387390929283}
@@ -1460,6 +1553,8 @@ Transform:
   - {fileID: 6344277198173380548}
   - {fileID: 1653363974056983015}
   - {fileID: 2151128299926115450}
+  - {fileID: 8949712201658255475}
+  - {fileID: 2108200344164532078}
   m_Father: {fileID: 6270125480654792892}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6894199175562501215
@@ -1472,7 +1567,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5644679062417908941}
   - component: {fileID: 7347494043685630306}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1517,7 +1612,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3525101483031734143}
   - component: {fileID: 6929857160268878563}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SP_Item_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1552,7 +1647,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.SpawnPoint
   spawnType: 0
-  spawnChance: 1
+  spawnChance: 0.1
 --- !u!1 &7121037848574188706
 GameObject:
   m_ObjectHideFlags: 0
@@ -1563,7 +1658,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2035753949765363966}
   - component: {fileID: 857001686599169772}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SP_Trap_03 (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1609,7 +1704,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1850727813959681016}
   - component: {fileID: 208935783263880790}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SP_Item_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1644,7 +1739,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.SpawnPoint
   spawnType: 0
-  spawnChance: 1
+  spawnChance: 0.1
 --- !u!1 &7298772275195445350
 GameObject:
   m_ObjectHideFlags: 0
@@ -1655,7 +1750,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2304986674065127310}
   - component: {fileID: 6467229602920985057}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SP_Trap_03 (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1701,7 +1796,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8857278280197063151}
   - component: {fileID: 51771476496604261}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SP_Trap_03 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1747,7 +1842,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1653363974056983015}
   - component: {fileID: 5214312551907777049}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: SP_Trap_03 (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1783,3 +1878,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.SpawnPoint
   spawnType: 1
   spawnChance: 1
+--- !u!1 &9101156176694608056
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2108200344164532078}
+  - component: {fileID: 396043849823944223}
+  m_Layer: 3
+  m_Name: SP_Boss_02
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2108200344164532078
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9101156176694608056}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 10.48, y: -1.44, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8114099824015963592}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &396043849823944223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9101156176694608056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59b1209915aaaeec59f3ba7ce50b15e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.SpawnPoint
+  spawnType: 2
+  spawnChance: 0.5

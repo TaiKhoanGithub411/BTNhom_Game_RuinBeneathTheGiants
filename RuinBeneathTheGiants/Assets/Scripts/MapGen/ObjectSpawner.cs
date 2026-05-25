@@ -11,7 +11,7 @@ namespace BTNhom.MapGen
         /// <summary>
         /// Điền đầy (populate) các vật thể ngẫu nhiên vào các điểm spawn của một chunk dựa trên độ khó.
         /// </summary>
-        public static void PopulateChunk(ChunkInstance chunk, SpawnConfig config, ItemDatabase itemsDb, TrapDatabase trapsDb, int currentDifficulty)
+        public static void PopulateChunk(ChunkInstance chunk, SpawnConfig config, ItemDatabase itemsDb, TrapDatabase trapsDb, BossDatabase bossDb, int currentDifficulty)
         {
             if (chunk == null) return;
             if (chunk.IsPopulated) return;
@@ -27,6 +27,7 @@ namespace BTNhom.MapGen
             // Tính toán tỉ lệ xuất hiện thực tế dựa theo độ khó hiện tại
             float adjustedItemRate = config.GetAdjustedItemSpawnRate(currentDifficulty);
             float adjustedTrapRate = config.GetAdjustedTrapSpawnRate(currentDifficulty);
+            float adjustedBossRate = config.GetAdjustedBossSpawnRate(currentDifficulty);
 
             foreach (var sp in spawnPoints)
             {
@@ -52,7 +53,10 @@ namespace BTNhom.MapGen
                         break;
 
                     case SpawnPointType.Boss:
-                        // Tạm thời chưa xử lý Boss sinh ở đây, tương lai sẽ hook vào đây
+                        if (Random.value < (adjustedBossRate * finalChance))
+                        {
+                            SpawnBossZone(sp.transform.position, chunk.transform, bossDb);
+                        }
                         break;
                 }
             }
@@ -101,6 +105,20 @@ namespace BTNhom.MapGen
             {
                 trap.Initialize(entry.Value.data);
             }
+        }
+
+        /// <summary>
+        /// Thực hiện sinh Vùng kích hoạt Boss (BossZone) làm con của Chunk.
+        /// </summary>
+        private static void SpawnBossZone(Vector3 position, Transform parent, BossDatabase db)
+        {
+            if (db == null) return;
+
+            var entry = db.GetRandomBossZone();
+            if (entry == null || entry.Value.prefab == null) return;
+
+            // Sinh prefab Zone làm con của chunk
+            Object.Instantiate(entry.Value.prefab, position, Quaternion.identity, parent);
         }
     }
 }

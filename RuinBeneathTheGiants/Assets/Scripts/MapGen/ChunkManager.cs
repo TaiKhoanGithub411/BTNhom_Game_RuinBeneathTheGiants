@@ -24,11 +24,23 @@ namespace BTNhom.MapGen
         [Tooltip("Cơ sở dữ liệu chứa danh sách bẫy")]
         [SerializeField] private TrapDatabase trapDatabase;
 
+        [Tooltip("Cơ sở dữ liệu chứa danh sách các vùng kích hoạt Boss")]
+        [SerializeField] private BossDatabase bossDatabase;
+
         [Header("Configuration")]
         [Tooltip("Cấu hình tỉ lệ spawn và scaling độ khó")]
         [SerializeField] private SpawnConfig spawnConfig;
 
         [Header("Spawning Parameters")]
+        [Tooltip("Số lượng chunk tối đa được phép tồn tại trên màn hình")]
+        [SerializeField] private int maxActiveChunks = 5;
+
+        [Tooltip("Khoảng cách hố trống ngẫu nhiên nhỏ nhất giữa các Chunk (tính bằng ô)")]
+        [SerializeField] private int minGap = 0;
+        
+        [Tooltip("Khoảng cách hố trống ngẫu nhiên lớn nhất giữa các Chunk (tính bằng ô)")]
+        [SerializeField] private int maxGap = 2;
+
         [Tooltip("Khoảng cách tối thiểu sinh thêm chunk phía trước Player")]
         [SerializeField] private float spawnAheadDistance = 35f;
 
@@ -135,15 +147,29 @@ namespace BTNhom.MapGen
                 SpawnChunkToLeft();
             }
 
-            // 3. Tự động dọn dẹp các chunk quá xa tầm nhìn cả 2 phía để tối ưu hóa hiệu năng
-            for (int i = activeChunks.Count - 1; i >= 0; i--)
+            // 3. Tự động dọn dẹp các chunk dựa trên số lượng tối đa (maxActiveChunks)
+            while (activeChunks.Count > maxActiveChunks)
             {
-                ChunkInstance chunk = activeChunks[i];
+                // Xác định xem chunk ngoài cùng bên trái hay bên phải đang ở xa Player hơn
+                float leftCenter = (activeChunks[0].LeftEdge + activeChunks[0].RightEdge) / 2f;
+                int lastIndex = activeChunks.Count - 1;
+                float rightCenter = (activeChunks[lastIndex].LeftEdge + activeChunks[lastIndex].RightEdge) / 2f;
                 
-                // Chunk nằm hoàn toàn bên trái vùng giới hạn hoặc hoàn toàn bên phải vùng giới hạn
-                if (chunk.RightEdge < playerX - despawnDistance || chunk.LeftEdge > playerX + despawnDistance)
+                float leftDist = Mathf.Abs(playerX - leftCenter);
+                float rightDist = Mathf.Abs(playerX - rightCenter);
+
+                if (leftDist > rightDist)
                 {
-                    activeChunks.RemoveAt(i);
+                    // Xóa chunk bên trái
+                    ChunkInstance chunk = activeChunks[0];
+                    activeChunks.RemoveAt(0);
+                    Destroy(chunk.gameObject);
+                }
+                else
+                {
+                    // Xóa chunk bên phải
+                    ChunkInstance chunk = activeChunks[lastIndex];
+                    activeChunks.RemoveAt(lastIndex);
                     Destroy(chunk.gameObject);
                 }
             }
@@ -164,17 +190,19 @@ namespace BTNhom.MapGen
                 return;
             }
 
-            Vector3 spawnPos = new Vector3(startX, 0f, 0f);
+            Vector3 spawnPos = new Vector3(startX, 0f, 0f); // Tạo tọa độ tạm thời
             GameObject spawnedObj = Instantiate(chunkData.Prefab, spawnPos, Quaternion.identity, transform);
             ChunkInstance instance = spawnedObj.AddComponent<ChunkInstance>();
-            instance.Initialize(chunkData, 0);
+            
+            // Khởi tạo và yêu cầu tự động căng chỉnh tâm (Khớp mép trái vào startX)
+            instance.Initialize(chunkData, 0, startX, true);
 
             activeChunks.Add(instance);
 
             // Sinh vật phẩm/bẫy ban đầu
             if (spawnConfig != null && itemDatabase != null && trapDatabase != null)
             {
-                ObjectSpawner.PopulateChunk(instance, spawnConfig, itemDatabase, trapDatabase, 0);
+                ObjectSpawner.PopulateChunk(instance, spawnConfig, itemDatabase, trapDatabase, bossDatabase, 0);
             }
         }
 
@@ -183,34 +211,38 @@ namespace BTNhom.MapGen
         /// </summary>
         private void SpawnChunkToRight()
         {
-            float spawnX = 0f;
+            float targetX = 0f;
             if (activeChunks.Count > 0)
             {
-                spawnX = activeChunks[activeChunks.Count - 1].RightEdge;
+                // Vị trí mục tiêu = Mép phải của chunk hiện tại + khoảng trống ngẫu nhiên
+                float randomGap = Random.Range((float)minGap, (float)maxGap + 0.1f);
+                targetX = activeChunks[activeChunks.Count - 1].RightEdge + randomGap;
             }
             else
             {
-                if (playerTransform != null) spawnX = playerTransform.position.x;
+                if (playerTransform != null) targetX = playerTransform.position.x;
             }
 
             int currentDiff = GetCurrentDifficulty();
             ChunkData chunkData = chunkDatabase.GetRandomChunk(currentDiff);
             if (chunkData == null) return;
 
-            Vector3 spawnPos = new Vector3(spawnX, 0f, 0f);
+            Vector3 spawnPos = new Vector3(targetX, 0f, 0f);
             GameObject spawnedObj = Instantiate(chunkData.Prefab, spawnPos, Quaternion.identity, transform);
             ChunkInstance instance = spawnedObj.AddComponent<ChunkInstance>();
-            instance.Initialize(chunkData, currentDiff);
+            
+            // Khởi tạo và yêu cầu căng chỉnh mép trái trùng khít với targetX
+            instance.Initialize(chunkData, currentDiff, targetX, true);
 
             activeChunks.Add(instance);
 
             // Chỉ sinh vật phẩm/bẫy nếu đây là vùng đất mới (nằm ở rìa tiến lên so với maxPlayerX)
             // Có buffer nhỏ 2 unit để tránh sai số nhỏ của float
-            if (spawnX + 2f >= maxPlayerX)
+            if (targetX + 2f >= maxPlayerX)
             {
                 if (spawnConfig != null && itemDatabase != null && trapDatabase != null)
                 {
-                    ObjectSpawner.PopulateChunk(instance, spawnConfig, itemDatabase, trapDatabase, currentDiff);
+                    ObjectSpawner.PopulateChunk(instance, spawnConfig, itemDatabase, trapDatabase, bossDatabase, currentDiff);
                 }
             }
             else
@@ -232,13 +264,16 @@ namespace BTNhom.MapGen
             ChunkData chunkData = chunkDatabase.GetRandomChunk(currentDiff);
             if (chunkData == null) return;
 
-            // Vị trí spawn bằng mép trái của chunk trái nhất trừ đi chiều rộng của chunk mới sinh
-            float spawnX = leftmost.LeftEdge - chunkData.Width;
-            Vector3 spawnPos = new Vector3(spawnX, 0f, 0f);
+            // Vị trí mục tiêu = Mép trái của chunk hiện tại - khoảng trống ngẫu nhiên
+            float randomGap = Random.Range((float)minGap, (float)maxGap + 0.1f);
+            float targetX = leftmost.LeftEdge - randomGap;
+            Vector3 spawnPos = new Vector3(targetX, 0f, 0f); // Tọa độ tạm
 
             GameObject spawnedObj = Instantiate(chunkData.Prefab, spawnPos, Quaternion.identity, transform);
             ChunkInstance instance = spawnedObj.AddComponent<ChunkInstance>();
-            instance.Initialize(chunkData, currentDiff);
+            
+            // Truyền tham số false vì đây là SpawnToLeft (Căng chỉnh mép phải)
+            instance.Initialize(chunkData, currentDiff, targetX, false);
 
             // Chèn vào đầu danh sách activeChunks vì nó nằm bên trái nhất
             activeChunks.Insert(0, instance);

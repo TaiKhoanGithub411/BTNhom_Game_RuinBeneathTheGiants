@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BossAttackData
   damage: 9999
   telegraphTime: 1
-  cooldownMin: 2
-  cooldownMax: 5
+  cooldownMin: 1
+  cooldownMax: 3

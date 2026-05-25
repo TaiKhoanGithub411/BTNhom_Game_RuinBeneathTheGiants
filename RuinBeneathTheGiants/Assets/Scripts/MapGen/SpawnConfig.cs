@@ -15,6 +15,9 @@ namespace BTNhom.MapGen
         [Tooltip("Xác suất cơ bản sinh bẫy tại một SpawnPoint loại Trap")]
         [SerializeField, Range(0f, 1f)] private float baseTrapSpawnRate = 0.4f;
 
+        [Tooltip("Xác suất cơ bản sinh vùng kích hoạt Boss tại một SpawnPoint loại Boss")]
+        [SerializeField, Range(0f, 1f)] private float baseBossSpawnRate = 0.2f;
+
         [Header("Difficulty Scaling")]
         [Tooltip("Khoảng cách (mét/units) Player cần vượt qua để tăng 1 cấp độ khó")]
         [SerializeField, Min(10f)] private float distanceIntervalForDifficulty = 50f;
@@ -31,6 +34,7 @@ namespace BTNhom.MapGen
         // Getters
         public float BaseItemSpawnRate => baseItemSpawnRate;
         public float BaseTrapSpawnRate => baseTrapSpawnRate;
+        public float BaseBossSpawnRate => baseBossSpawnRate;
         public float DistanceIntervalForDifficulty => distanceIntervalForDifficulty;
         public int MaxDifficultyLevel => maxDifficultyLevel;
         public float TrapRateIncreasePerLevel => trapRateIncreasePerLevel;
@@ -52,6 +56,16 @@ namespace BTNhom.MapGen
         {
             float rate = baseTrapSpawnRate + (currentDifficulty * trapRateIncreasePerLevel);
             return Mathf.Clamp(rate, 0f, 0.9f); // Giữ tối đa 90% tránh bẫy xuất hiện quá đặc đặc
+        }
+
+        /// <summary>
+        /// Tính toán tỉ lệ sinh Boss thực tế dựa vào độ khó hiện tại.
+        /// </summary>
+        public float GetAdjustedBossSpawnRate(int currentDifficulty)
+        {
+            // Có thể thêm logic tăng tỉ lệ Boss theo độ khó nếu muốn, hiện tại cứ để tăng nhẹ 1% mỗi level
+            float rate = baseBossSpawnRate + (currentDifficulty * 0.01f);
+            return Mathf.Clamp(rate, 0f, 0.5f); // Tối đa 50% ra Boss để không bị quá tải
         }
     }
 }
