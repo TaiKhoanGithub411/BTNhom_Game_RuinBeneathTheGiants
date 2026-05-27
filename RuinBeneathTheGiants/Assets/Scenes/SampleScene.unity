@@ -1888,11 +1888,11 @@ MonoBehaviour:
   chunkDatabase: {fileID: 11400000, guid: 5238ebe00b17442c4aa2aeab2f34b684, type: 2}
   itemDatabase: {fileID: 11400000, guid: f2ff6b33e8d28247bbfaff894cc5e003, type: 2}
   trapDatabase: {fileID: 11400000, guid: 65d4b46e3ed609f30a739403e45a7acd, type: 2}
-  bossDatabase: {fileID: 0}
+  bossDatabase: {fileID: 11400000, guid: a6a069acfb9145949bb6446a3f74a3a5, type: 2}
   spawnConfig: {fileID: 11400000, guid: 0547febd7cd037b9d9d7dccb6d3e71fe, type: 2}
   maxActiveChunks: 5
-  minGap: 0
-  maxGap: 3
+  minGap: 2
+  maxGap: 5
   spawnAheadDistance: 35
   keepBehindDistance: 35
   despawnDistance: 60

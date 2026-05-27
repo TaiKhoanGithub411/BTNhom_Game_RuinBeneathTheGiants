@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb0117d9f5d011dd9c2c286a54f116c, type: 3}
   m_Name: SpawnConfig_Default
   m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.SpawnConfig
-  baseItemSpawnRate: 0.3
-  baseTrapSpawnRate: 0.6
+  baseItemSpawnRate: 0.636
+  baseTrapSpawnRate: 0.813
+  baseBossSpawnRate: 0.503
   distanceIntervalForDifficulty: 50
   maxDifficultyLevel: 15
   trapRateIncreasePerLevel: 0.1
-  itemRateDecreasePerLevel: 0.05
+  itemRateDecreasePerLevel: 0.026

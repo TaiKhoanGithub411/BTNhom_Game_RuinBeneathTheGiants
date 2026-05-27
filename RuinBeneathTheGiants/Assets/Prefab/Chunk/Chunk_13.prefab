@@ -86,7 +86,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.SpawnPoint
   spawnType: 0
-  spawnChance: 0.2
+  spawnChance: 0.5
 --- !u!1 &1638771243240202220
 GameObject:
   m_ObjectHideFlags: 0
@@ -1016,7 +1016,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.SpawnPoint
   spawnType: 0
-  spawnChance: 0.2
+  spawnChance: 0.5
 --- !u!1 &6465341856082387110
 GameObject:
   m_ObjectHideFlags: 0
@@ -1062,7 +1062,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.SpawnPoint
   spawnType: 0
-  spawnChance: 0.2
+  spawnChance: 0.5
 --- !u!1 &7375442979276650218
 GameObject:
   m_ObjectHideFlags: 0
@@ -1108,7 +1108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.SpawnPoint
   spawnType: 0
-  spawnChance: 0.2
+  spawnChance: 0.5
 --- !u!1 &8600398361966028047
 GameObject:
   m_ObjectHideFlags: 0

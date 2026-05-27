@@ -1,21 +1,21 @@
 {
   "context": {
     "projectPath": "E:/BTNhom_Game_RuinBeneathTheGiants/Packages",
-    "unityVersion": "6000.0.75f1"
+    "unityVersion": "6000.4.0f1"
   },
   "inputs": [
     "E:\\BTNhom_Game_RuinBeneathTheGiants\\Packages\\manifest.json",
     "E:\\BTNhom_Game_RuinBeneathTheGiants\\Packages\\packages-lock.json",
-    "C:\\Program Files\\Unity\\Hub\\Editor\\6000.0.75f1\\Editor\\Data\\Resources\\PackageManager\\BuiltInPackages\\BuiltInPackagesCombined.sha1"
+    "C:\\Program Files\\Unity\\Hub\\Editor\\6000.4.0f1\\Editor\\Data\\Resources\\PackageManager\\BuiltInPackages\\BuiltInPackagesCombined.sha1"
   ],
   "outputs": {
-    "com.unity.multiplayer.center@1.0.0": {
+    "com.unity.multiplayer.center@1.0.1": {
       "name": "com.unity.multiplayer.center",
       "displayName": "Multiplayer Center",
-      "resolvedPath": "E:\\BTNhom_Game_RuinBeneathTheGiants\\Library\\PackageCache\\com.unity.multiplayer.center@f3fb577b3546",
-      "fingerprint": "f3fb577b3546594b97b8cc34307cd621f60f1c73",
+      "resolvedPath": "E:\\BTNhom_Game_RuinBeneathTheGiants\\Library\\PackageCache\\com.unity.multiplayer.center@f01f4ba8d00a",
+      "fingerprint": "f01f4ba8d00afa4e957bddf0fcd1612a564401ff",
       "editorCompatibility": "6000.0.0a1",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "source": "builtin",
       "testable": false
     },
@@ -23,6 +23,14 @@
       "name": "com.unity.modules.accessibility",
       "displayName": "Accessibility",
       "resolvedPath": "E:\\BTNhom_Game_RuinBeneathTheGiants\\Library\\PackageCache\\com.unity.modules.accessibility",
+      "version": "1.0.0",
+      "source": "builtin",
+      "testable": false
+    },
+    "com.unity.modules.adaptiveperformance@1.0.0": {
+      "name": "com.unity.modules.adaptiveperformance",
+      "displayName": "Adaptive Performance",
+      "resolvedPath": "E:\\BTNhom_Game_RuinBeneathTheGiants\\Library\\PackageCache\\com.unity.modules.adaptiveperformance",
       "version": "1.0.0",
       "source": "builtin",
       "testable": false
@@ -231,6 +239,14 @@
       "name": "com.unity.modules.unitywebrequestwww",
       "displayName": "Unity Web Request WWW",
       "resolvedPath": "E:\\BTNhom_Game_RuinBeneathTheGiants\\Library\\PackageCache\\com.unity.modules.unitywebrequestwww",
+      "version": "1.0.0",
+      "source": "builtin",
+      "testable": false
+    },
+    "com.unity.modules.vectorgraphics@1.0.0": {
+      "name": "com.unity.modules.vectorgraphics",
+      "displayName": "Vector Graphics",
+      "resolvedPath": "E:\\BTNhom_Game_RuinBeneathTheGiants\\Library\\PackageCache\\com.unity.modules.vectorgraphics",
       "version": "1.0.0",
       "source": "builtin",
       "testable": false
