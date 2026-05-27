@@ -15,5 +15,5 @@ MonoBehaviour:
   chunkName: Chunk 10
   prefab: {fileID: 5038485679173015725, guid: 20d9fcb3aad188bf69509bb74d97e16f, type: 3}
   width: 26
-  minDifficulty: 0
+  minDifficulty: 4
   maxDifficulty: 15
