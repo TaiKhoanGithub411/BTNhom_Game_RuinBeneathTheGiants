@@ -970,7 +970,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BTNhom.MapGen.SpawnPoint
   spawnType: 2
-  spawnChance: 0.5
+  spawnChance: 0.154
 --- !u!1 &5823887480735707210
 GameObject:
   m_ObjectHideFlags: 0

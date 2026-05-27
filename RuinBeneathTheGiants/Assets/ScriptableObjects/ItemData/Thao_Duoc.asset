@@ -18,4 +18,4 @@ MonoBehaviour:
   - EffectType: 3
     Value: 0
     Duration: 20
-  lifetime: 10
+  lifetime: 20

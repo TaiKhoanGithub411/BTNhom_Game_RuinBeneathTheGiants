@@ -115,7 +115,7 @@ public class PlayerController : MonoBehaviour
         // Khóa hành động nhảy nếu đang kiệt sức hoặc bị kẹp bẫy
         if (vitals.IsExhausted || vitals.IsTrapped) return;
 
-        if (Input.GetKeyDown(KeyCode.W))
+        if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space))
         {
             // Ví dụ: Nhảy tốn 10 Stamina. Chỉ nhảy được khi còn Stamina.
             // Việc phát âm thanh nhảy, nếu có, nên do AudioManager nghe event phù hợp

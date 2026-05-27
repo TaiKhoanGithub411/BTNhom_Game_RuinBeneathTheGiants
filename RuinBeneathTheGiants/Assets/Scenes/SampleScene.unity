@@ -2135,7 +2135,7 @@ MonoBehaviour:
   zoneType: 1
   bossFootPrefab: {fileID: 8786330160377170254, guid: 16c10e9775521c64a9d6bd81d692b350, type: 3}
   attackData: {fileID: 11400000, guid: 11897f7a21518a44dbfdcf6baccda998, type: 2}
-  spawnYOffset: 2
+  spawnYOffset: 3
   randomXRange: 3
 --- !u!61 &555865476
 BoxCollider2D:
@@ -2171,7 +2171,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.57196903, y: 0}
+  m_Offset: {x: 0.033299685, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -2181,7 +2181,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 10.378363, y: 1}
+  m_Size: {x: 3.1049342, y: 1}
   m_EdgeRadius: 0
 --- !u!4 &555865477
 Transform:

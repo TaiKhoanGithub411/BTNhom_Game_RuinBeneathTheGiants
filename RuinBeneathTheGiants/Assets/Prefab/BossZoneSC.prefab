@@ -93,6 +93,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BossEncounterTrigger
   zoneType: 0
   bossFootPrefab: {fileID: 5455215111671744415, guid: 6dee48835a7e0c04088f444f35798e2f, type: 3}
-  attackData: {fileID: 11400000, guid: 11897f7a21518a44dbfdcf6baccda998, type: 2}
-  spawnYOffset: 5
+  attackData: {fileID: 0}
+  spawnYOffset: 4
   randomXRange: 3
