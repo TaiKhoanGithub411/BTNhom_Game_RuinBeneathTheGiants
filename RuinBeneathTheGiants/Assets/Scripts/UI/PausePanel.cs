@@ -32,11 +32,7 @@ public class PausePanel : MonoBehaviour
 
     [Header("Navigation")]
     [SerializeField] private Button resumeButton;
-    [SerializeField] private Button backButton;
     [SerializeField] private Button newGameButton;
-
-    [Header("Scenes")]
-    [SerializeField] private string welcomeSceneName = "Welcome";
 
     private bool isVisible;
     private Image overlayImage;
@@ -46,7 +42,6 @@ public class PausePanel : MonoBehaviour
         CacheOverlayImage();
 
         RegisterButton(resumeButton, Resume);
-        RegisterButton(backButton, BackToWelcome);
         RegisterButton(newGameButton, NewGame);
         RegisterButton(fullscreenOffButton, () => SetFullScreen(false));
         RegisterButton(fullscreenOnButton, () => SetFullScreen(true));
@@ -129,12 +124,6 @@ public class PausePanel : MonoBehaviour
         Hide();
     }
 
-    public void BackToWelcome()
-    {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(welcomeSceneName);
-    }
-
     public void NewGame()
     {
         Time.timeScale = 1f;
@@ -178,38 +167,28 @@ public class PausePanel : MonoBehaviour
 
     private void SetFullScreen(bool enabled)
     {
-        Screen.fullScreen = enabled;
+        FullscreenUiHelper.ApplyDisplayMode(enabled);
         PlayerPrefs.SetInt(KeyFullScreen, enabled ? 1 : 0);
         PlayerPrefs.Save();
-        RefreshFullScreenButtons();
+        RefreshFullScreenButtons(enabled);
     }
 
     private void ApplySavedFullScreen()
     {
-        if (!PlayerPrefs.HasKey(KeyFullScreen))
+        if (PlayerPrefs.HasKey(KeyFullScreen))
         {
-            RefreshFullScreenButtons();
+            bool enabled = PlayerPrefs.GetInt(KeyFullScreen, 0) == 1;
+            FullscreenUiHelper.ApplyDisplayMode(enabled);
+            RefreshFullScreenButtons(enabled);
             return;
         }
 
-        bool enabled = PlayerPrefs.GetInt(KeyFullScreen, 0) == 1;
-        Screen.fullScreen = enabled;
         RefreshFullScreenButtons();
     }
 
-    private void RefreshFullScreenButtons()
+    private void RefreshFullScreenButtons(bool? isFullScreen = null)
     {
-        bool isFullScreen = Screen.fullScreen;
-
-        if (fullscreenOnButton != null)
-        {
-            fullscreenOnButton.interactable = !isFullScreen;
-        }
-
-        if (fullscreenOffButton != null)
-        {
-            fullscreenOffButton.interactable = isFullScreen;
-        }
+        FullscreenUiHelper.RefreshButtons(fullscreenOnButton, fullscreenOffButton, isFullScreen);
     }
 
     private void ApplyAudioVolumes(float master, float music, float sfx)
